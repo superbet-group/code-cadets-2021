@@ -6,6 +6,7 @@ import (
 	"io/ioutil"
 	"log"
 	"os"
+	"unicode/utf8"
 
 	"github.com/pkg/errors"
 	"github.com/sethgrid/pester"
@@ -27,6 +28,14 @@ func stringInSlice(a []string, list []string) bool {
 		}
 	}
 	return false
+}
+
+func RemoveLastChar(str string) string {
+	for len(str) > 0 {
+		_, size := utf8.DecodeLastRuneInString(str)
+		return str[:len(str)-size]
+	}
+	return str
 }
 
 func main() {
@@ -56,13 +65,24 @@ func main() {
 	}
 
 	f, err := os.Create("output.txt")
+	if err != nil {
+		log.Fatal(
+			errors.WithMessage(err, "opening a file"),
+		)
+	}
 
 	contained := []string{"Go", "Java"}
 
 	for _, val := range decode {
 		if val.Passed {
 			if stringInSlice(contained, val.Skills) {
-				f.WriteString(fmt.Sprint(val) + "\n")
+				skills := ""
+				for _, x := range val.Skills {
+					skills += x + ","
+				}
+
+				skills = RemoveLastChar(skills)
+				f.WriteString(fmt.Sprint(val.Name) + "-" + skills + "\n")
 			}
 		}
 	}
