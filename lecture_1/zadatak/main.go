@@ -6,7 +6,7 @@ import (
 	"io/ioutil"
 	"log"
 	"os"
-	"unicode/utf8"
+	"strings"
 
 	"github.com/pkg/errors"
 	"github.com/sethgrid/pester"
@@ -28,14 +28,6 @@ func stringInSlice(a []string, list []string) bool {
 		}
 	}
 	return false
-}
-
-func RemoveLastChar(str string) string {
-	for len(str) > 0 {
-		_, size := utf8.DecodeLastRuneInString(str)
-		return str[:len(str)-size]
-	}
-	return str
 }
 
 func main() {
@@ -77,11 +69,8 @@ func main() {
 		if val.Passed {
 			if stringInSlice(contained, val.Skills) {
 				skills := ""
-				for _, x := range val.Skills {
-					skills += x + ","
-				}
+				skills = strings.Join(val.Skills, ",")
 
-				skills = RemoveLastChar(skills)
 				f.WriteString(fmt.Sprint(val.Name) + "-" + skills + "\n")
 			}
 		}
