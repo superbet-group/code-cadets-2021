@@ -1,3 +1,4 @@
+// Package containing main executable for FizzBuzz
 package main
 
 import (
@@ -9,6 +10,7 @@ import (
 	"code-cadets-2021/homework_1/Task-01/fizzbuzz"
 )
 
+// main is the entrypoint for executable that prints FizzBuzz according to given flags.
 func main() {
 	start := flag.Int("start", 10, "Value (inclusive) from which fizzbuzz starts counting")
 	end := flag.Int("end", 20, "Value (inclusive) to which fizzbuzz counts to")

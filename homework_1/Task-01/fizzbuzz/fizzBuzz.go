@@ -1,3 +1,5 @@
+// Package fizzbuzz offers an implementation of the FizzBuzz game
+// more info: https://en.wikipedia.org/wiki/Fizz_buzz
 package fizzbuzz
 
 import (
@@ -6,6 +8,8 @@ import (
 	"github.com/pkg/errors"
 )
 
+// GetFizzBuzz returns a string which counts from given start (inclusive) to given end (inclusive) according to FizzBuzz rules.
+// Returns an error if given start is less than 1 or given start is greater than given end.
 func GetFizzBuzz(start, end int) (string, error) {
 	if start < 1 {
 		return "", errors.New("range start is less than 1")

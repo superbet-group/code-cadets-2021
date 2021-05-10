@@ -1,3 +1,4 @@
+// Package contains unit tests for FizzBuzz.
 package fizzbuzz_test
 
 import (
@@ -9,6 +10,7 @@ import (
 	"code-cadets-2021/homework_1/Task-01/fizzbuzz"
 )
 
+// TestGetFizzBuzz tests fizzbuzz.GetFizzBuzz method
 func TestGetFizzBuzz(t *testing.T) {
 	for idx, tc := range getTestCases() {
 		Convey(fmt.Sprintf("Given test case #%v: %+v", idx, tc), t, func() {

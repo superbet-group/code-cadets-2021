@@ -1,5 +1,7 @@
+// Package contains unit tests for FizzBuzz.
 package fizzbuzz_test
 
+// testCase is a model containing expected output and errors for appropriate start and end input.
 type testCase struct {
 	inputStart int
 	inputEnd   int
@@ -8,6 +10,7 @@ type testCase struct {
 	expectingError bool
 }
 
+// getTestCases returns an array of test cases.
 func getTestCases() []testCase {
 	return []testCase{
 		{
