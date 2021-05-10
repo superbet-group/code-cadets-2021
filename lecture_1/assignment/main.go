@@ -6,7 +6,6 @@ import (
 	"log"
 	"net/http"
 	"os"
-	"strings"
 
 	"github.com/pkg/errors"
 )
@@ -20,50 +19,62 @@ type jobApiResponse struct {
 
 const candidates = "https://run.mocky.io/v3/f7ceece5-47ee-4955-b974-438982267dc8"
 
-func fetchContent() []jobApiResponse {
+func fetchContent() ([]jobApiResponse, error) {
 	httpResponse, err := http.Get(candidates)
 	//httpClient := &http.Client{}
 	//
 	//httpResponse, err := httpClient.Get(candidates)
 	if err != nil {
-		log.Fatal(
-			errors.WithMessage(err, "HTTP get towards job_api API"),
-		)
+		return nil, err
 	}
 
 	bodyContent, err := ioutil.ReadAll(httpResponse.Body)
 	if err != nil {
-		log.Fatal(
-			errors.WithMessage(err, "reading body of candidates API response"),
-		)
+		return nil, err
 	}
 
 	var decodedContent []jobApiResponse
 	err = json.Unmarshal(bodyContent, &decodedContent)
 	if err != nil {
-		log.Fatal(
-			errors.WithMessage(err, "unmarshalling the JSON body content"),
-		)
+		return decodedContent, err
 	}
-	return decodedContent
+
+	return decodedContent, nil
 }
 
-func getFile(path string) *os.File {
+func getFile(path string) (*os.File, error) {
 	f, err := os.Create(path)
 	if err != nil {
-		log.Fatal(
-			errors.WithMessage(err, "opening a file"),
-		)
+		return f, err
 	}
-	return f
+
+	return f, nil
 }
 
-func formatSkills(slice []string) string {
-	var str string
-	for _, item := range slice {
-		str += ", " + item
+func setContains(array []string, strings ...string) bool {
+	set := make(map[string]struct{})
+	for _, val := range array {
+		set[val] = struct{}{}
 	}
-	return str[2:]
+
+	for _, str := range strings {
+		_, exists := set[str]
+		if exists {
+			return true
+		}
+	}
+
+	return false
+}
+
+func formatSkills(skills []string) string {
+	formattedSkills := ""
+	for _, val := range skills {
+		formattedSkills += val + ","
+	}
+	formattedSkills = formattedSkills[:len(formattedSkills)-1]
+
+	return formattedSkills
 }
 
 func writeToFile(f *os.File, content []jobApiResponse) {
@@ -71,18 +82,32 @@ func writeToFile(f *os.File, content []jobApiResponse) {
 		if !val.Passed {
 			continue
 		}
+		skills := val.Skills
 
-		skills := formatSkills(val.Skills)
-		if strings.Contains(skills, "Go") || strings.Contains(skills, "Java") {
-			f.WriteString(val.Name + " - " + skills + "\n")
+		isContained := setContains(skills, "Java", "Go")
+
+		if isContained {
+			formattedSkills := formatSkills(skills)
+
+			f.WriteString(val.Name + " - " + formattedSkills + "\n")
 		}
 	}
 }
 
 func main() {
-	decodedContent := fetchContent()
+	decodedContent, err := fetchContent()
+	if err != nil {
+		log.Fatal(
+			errors.WithMessage(err, "Unable to fetch content"),
+		)
+	}
 
-	f := getFile("output.txt")
+	f, err := getFile("output.txt")
+	if err != nil {
+		log.Fatal(
+			errors.WithMessage(err, "Unable to read file"),
+		)
+	}
 
 	defer f.Close()
 	writeToFile(f, decodedContent)
