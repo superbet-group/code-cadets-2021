@@ -4,12 +4,11 @@ import (
 	"encoding/json"
 	"io/ioutil"
 	"log"
+	"net/http"
 	"os"
 	"strings"
-	"time"
 
 	"github.com/pkg/errors"
-	"github.com/sethgrid/pester"
 )
 
 type jobApiResponse struct {
@@ -19,17 +18,13 @@ type jobApiResponse struct {
 	Skills []string
 }
 
-const jobApi = "https://run.mocky.io/v3/f7ceece5-47ee-4955-b974-438982267dc8"
-
-func linearBackoff(retry int) time.Duration {
-	return time.Duration(retry) * time.Second
-}
+const candidates = "https://run.mocky.io/v3/f7ceece5-47ee-4955-b974-438982267dc8"
 
 func fetchContent() []jobApiResponse {
-	httpClient := pester.New()
-	httpClient.Backoff = linearBackoff
-
-	httpResponse, err := httpClient.Get(jobApi)
+	httpResponse, err := http.Get(candidates)
+	//httpClient := &http.Client{}
+	//
+	//httpResponse, err := httpClient.Get(candidates)
 	if err != nil {
 		log.Fatal(
 			errors.WithMessage(err, "HTTP get towards job_api API"),
@@ -39,7 +34,7 @@ func fetchContent() []jobApiResponse {
 	bodyContent, err := ioutil.ReadAll(httpResponse.Body)
 	if err != nil {
 		log.Fatal(
-			errors.WithMessage(err, "reading body of job_api API response"),
+			errors.WithMessage(err, "reading body of candidates API response"),
 		)
 	}
 
@@ -92,5 +87,5 @@ func main() {
 	defer f.Close()
 	writeToFile(f, decodedContent)
 	f.Sync()
-	log.Printf("Response from jobApi: %v", decodedContent)
+	log.Printf("Response from candidates api: %v", decodedContent)
 }
