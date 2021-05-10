@@ -5,7 +5,7 @@ import (
 
 	"github.com/pkg/errors"
 
-	"code-cadets-2021/homeword_1/Task-01/FizzBuzz"
+	"code-cadets-2021/homework_1/Task-01/FizzBuzz"
 )
 
 func main() {
