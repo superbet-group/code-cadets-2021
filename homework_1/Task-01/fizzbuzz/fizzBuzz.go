@@ -1,6 +1,8 @@
-package FizzBuzz
+package fizzbuzz
 
 import (
+	"strconv"
+
 	"github.com/pkg/errors"
 )
 
@@ -15,15 +17,20 @@ func FizzBuzz(start, end int) (string, error) {
 	output := ""
 
 	for i := start; i <= end; i++ {
+		str := ""
 		if i%3 == 0 {
-			output += " Fizz "
+			str += "Fizz"
 		}
 
 		if i%5 == 0 {
-			output += " Buzz "
+			str += "Buzz"
 		}
 
-		output += ","
+		if len(str) == 0 {
+			str += strconv.Itoa(i)
+		}
+
+		output += str + " "
 	}
 	return output[:len(output)-1], nil
 }
