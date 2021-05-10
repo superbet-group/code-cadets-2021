@@ -25,24 +25,24 @@ func linearBackoff(retry int) time.Duration {
 	return time.Duration(retry) * time.Second
 }
 
-func containsSkills(Skills []string) bool{
-	for i := 0; i<len(Skills); i++{
-		if Skills[i]=="Go" || Skills[i]=="Java" {
+func contains(skills []string, temp string) bool{
+	for _, skill := range skills{
+		if skill == temp {
 			return true
 		}
 	}
 	return false
 }
 
-func writeApplications(f *os.File, content []application) {
-	for i := 0; i < len(content); i++{
-		if content[i].Passed && containsSkills(content[i].Skills){
-			allSkills := content[i].Skills[0]
-			for j := 1; j< len(content[i].Skills); j++{
-				allSkills = allSkills + ", " + content[i].Skills[j]
+func writeApplications(f *os.File, applicants []application) {
+	for _, applicant := range applicants{
+		fmt.Println(applicant)
+		if applicant.Passed && (contains(applicant.Skills, "Java") || contains(applicant.Skills, "Go")){
+			allSkills := applicant.Skills[0]
+			for _, skill := range applicant.Skills[1:]{
+				allSkills = allSkills + ", " + skill
 			}
-
-			defer f.WriteString(fmt.Sprint(content[i].Name) + " - " + fmt.Sprint(allSkills) + "\n")
+			defer f.WriteString(fmt.Sprint(applicant.Name) + " - " + fmt.Sprint(allSkills) + "\n")
 		}
 	}
 }
@@ -82,5 +82,7 @@ func main() {
 		)
 	}
 	defer f.Close()
+
 	writeApplications(f, decodedContent)
+	f.Sync()
 }
