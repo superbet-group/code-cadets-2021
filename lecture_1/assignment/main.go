@@ -20,10 +20,9 @@ type jobApiResponse struct {
 const candidates = "https://run.mocky.io/v3/f7ceece5-47ee-4955-b974-438982267dc8"
 
 func fetchContent() ([]jobApiResponse, error) {
-	httpResponse, err := http.Get(candidates)
-	//httpClient := &http.Client{}
-	//
-	//httpResponse, err := httpClient.Get(candidates)
+	httpClient := &http.Client{}
+
+	httpResponse, err := httpClient.Get(candidates)
 	if err != nil {
 		return nil, err
 	}
