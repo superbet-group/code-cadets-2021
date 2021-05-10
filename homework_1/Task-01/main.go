@@ -12,6 +12,7 @@ import (
 func main() {
 	start := flag.Int("start", 10, "Value (inclusive) from which fizzbuzz starts counting")
 	end := flag.Int("end", 20, "Value (inclusive) to which fizzbuzz counts to")
+	flag.Parse()
 
 	str, err := fizzbuzz.GetFizzBuzz(*start, *end)
 	if err != nil {
