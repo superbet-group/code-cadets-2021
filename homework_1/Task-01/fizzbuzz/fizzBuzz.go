@@ -6,7 +6,7 @@ import (
 	"github.com/pkg/errors"
 )
 
-func FizzBuzz(start, end int) (string, error) {
+func GetFizzBuzz(start, end int) (string, error) {
 	if start < 1 {
 		return "", errors.New("range start is less than 1")
 	}
