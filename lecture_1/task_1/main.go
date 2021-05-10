@@ -36,7 +36,6 @@ func contains(skills []string, temp string) bool{
 
 func writeApplications(f *os.File, applicants []application) {
 	for _, applicant := range applicants{
-		fmt.Println(applicant)
 		if applicant.Passed && (contains(applicant.Skills, "Java") || contains(applicant.Skills, "Go")){
 			allSkills := applicant.Skills[0]
 			for _, skill := range applicant.Skills[1:]{
