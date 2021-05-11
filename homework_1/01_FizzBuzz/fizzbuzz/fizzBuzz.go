@@ -17,17 +17,17 @@ func GetFizzBuzzSolution(start int, end int) ([]string, error) {
 
 	var solution []string
 
-	for ;start <= end; start++ {
-		if start % 3 == 0 {
-			if start % 5 == 0 {
+	for n := start; n <= end; n++ {
+		if n % 3 == 0 {
+			if n % 5 == 0 {
 				solution = append(solution, "FizzBuzz")
 			} else {
 				solution = append(solution, "Fizz")
 			}
-		} else if start % 5 == 0 {
+		} else if n % 5 == 0 {
 			solution = append(solution, "Buzz")
 		} else {
-			solution = append(solution, strconv.Itoa(start))
+			solution = append(solution, strconv.Itoa(n))
 		}
 	}
 
