@@ -9,20 +9,20 @@ type taxBrackets struct {
 
 func checkTaxBrackets(brackets []float32, taxes []float32) error {
 	if len(brackets) == 0 || brackets[0] != 0 {
-		return errors.New("First bracket is not zero.")
+		return errors.New("first bracket is not zero")
 	}
 
 	if len(brackets) != len(taxes) {
-		return errors.New("Brackets and taxes don't have the same length.")
+		return errors.New("brackets and taxes don't have the same length")
 	}
 
 	for idx, bracket := range brackets {
 		if idx > 0 && bracket <= brackets[idx - 1] {
-			return errors.New("Bracket is not greater than the previous.")
+			return errors.New("bracket is not greater than the previous")
 		}
 
 		if taxes[idx] < 0 {
-			return errors.New("Tax is negative.")
+			return errors.New("tax is negative")
 		}
 	}
 
@@ -39,7 +39,7 @@ func NewTaxBrackets(brackets []float32, taxes []float32) (*taxBrackets, error) {
 
 func CalculateProgressiveTax(value float32, taxBrackets *taxBrackets) (float32, error) {
 	if value < 0 {
-		return 0, errors.New("Value is negative.")
+		return 0, errors.New("value is negative")
 	}
 
 	brackets := taxBrackets.brackets
