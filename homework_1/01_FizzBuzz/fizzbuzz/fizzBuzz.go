@@ -8,7 +8,7 @@ import (
 
 func GetFizzBuzzSolution(start int, end int) ([]string, error) {
 	if start > end {
-		return nil, errors.New("Start is greater than end.")
+		return nil, errors.New("start is greater than end")
 	}
 
 	var solution []string
