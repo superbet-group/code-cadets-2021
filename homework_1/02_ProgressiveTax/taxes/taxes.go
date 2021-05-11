@@ -45,7 +45,7 @@ func CalculateProgressiveTax(value float32, taxBrackets *taxBrackets) (float32, 
 	brackets := taxBrackets.brackets
 	taxes := taxBrackets.taxes
 
-	var finalTax float32
+	var finalTax float32 = 0
 
 	for idx, tax := range taxes {
 		if idx + 1 == len(taxes) || value <= brackets[idx + 1] {
