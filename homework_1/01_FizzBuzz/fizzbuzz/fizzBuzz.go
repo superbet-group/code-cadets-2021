@@ -11,10 +11,6 @@ func GetFizzBuzzSolution(start int, end int) ([]string, error) {
 		return nil, errors.New("Start is greater than end.")
 	}
 
-	if start < 1 {
-		return nil, errors.New("Start is lower than 1.")
-	}
-
 	var solution []string
 
 	for n := start; n <= end; n++ {
