@@ -20,20 +20,16 @@ func GetFizzBuzz(start, end int) (string, error) {
 	steps := make([]string, 0)
 
 	for i := start; i <= end; i++ {
-		step := ""
-		if i%3 == 0 {
-			step += "Fizz"
-		}
 
-		if i%5 == 0 {
-			step += "Buzz"
+		if i%3 == 0 && i%5 == 0 {
+			steps = append(steps, "FizzBuzz")
+		} else if i%3 == 0 {
+			steps = append(steps, "Fizz")
+		} else if i%5 == 0 {
+			steps = append(steps, "Buzz")
+		} else {
+			steps = append(steps, strconv.Itoa(i))
 		}
-
-		if len(step) == 0 {
-			step += strconv.Itoa(i)
-		}
-
-		steps = append(steps, step)
 	}
 
 	return strings.Join(steps, " "), nil
