@@ -2,6 +2,7 @@ package fizzbuzz
 
 import (
 	"strconv"
+	"strings"
 
 	"github.com/pkg/errors"
 )
@@ -16,7 +17,7 @@ func GetFizzBuzz(start, end int) (string, error) {
 		return "", errors.New("range start is greater than range end")
 	}
 
-	output := ""
+	steps := make([]string, 0)
 
 	for i := start; i <= end; i++ {
 		step := ""
@@ -32,7 +33,8 @@ func GetFizzBuzz(start, end int) (string, error) {
 			step += strconv.Itoa(i)
 		}
 
-		output += step + " "
+		steps = append(steps, step)
 	}
-	return output[:len(output)-1], nil
+
+	return strings.Join(steps, " "), nil
 }
