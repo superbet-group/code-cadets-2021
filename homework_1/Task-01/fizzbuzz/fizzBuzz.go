@@ -7,6 +7,9 @@ import (
 	"github.com/pkg/errors"
 )
 
+// delimiter between FizzBuzz steps
+const delimiter = " "
+
 // GetFizzBuzz returns a string which counts from given start (inclusive) to given end (inclusive) according to FizzBuzz rules.
 // Returns an error if given start is less than 1 or given start is greater than given end.
 func GetFizzBuzz(start, end int) (string, error) {
@@ -32,5 +35,5 @@ func GetFizzBuzz(start, end int) (string, error) {
 		}
 	}
 
-	return strings.Join(steps, " "), nil
+	return strings.Join(steps, delimiter), nil
 }
