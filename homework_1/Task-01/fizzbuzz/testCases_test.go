@@ -1,4 +1,3 @@
-// Package contains unit tests for FizzBuzz.
 package fizzbuzz_test
 
 // testCase is a model containing expected output and errors for appropriate start and end input.

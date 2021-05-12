@@ -1,5 +1,3 @@
-// Package fizzbuzz offers an implementation of the FizzBuzz game
-// more info: https://en.wikipedia.org/wiki/Fizz_buzz
 package fizzbuzz
 
 import (

@@ -1,4 +1,3 @@
-// Package contains unit tests for FizzBuzz.
 package fizzbuzz_test
 
 import (

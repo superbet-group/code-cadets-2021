@@ -1,4 +1,3 @@
-// Package containing main executable for FizzBuzz
 package main
 
 import (
