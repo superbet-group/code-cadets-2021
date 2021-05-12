@@ -19,20 +19,20 @@ func GetFizzBuzz(start, end int) (string, error) {
 	output := ""
 
 	for i := start; i <= end; i++ {
-		str := ""
+		step := ""
 		if i%3 == 0 {
-			str += "Fizz"
+			step += "Fizz"
 		}
 
 		if i%5 == 0 {
-			str += "Buzz"
+			step += "Buzz"
 		}
 
-		if len(str) == 0 {
-			str += strconv.Itoa(i)
+		if len(step) == 0 {
+			step += strconv.Itoa(i)
 		}
 
-		output += str + " "
+		output += step + " "
 	}
 	return output[:len(output)-1], nil
 }
