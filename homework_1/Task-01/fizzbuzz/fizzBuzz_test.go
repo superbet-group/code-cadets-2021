@@ -11,16 +11,16 @@ import (
 
 // TestGetFizzBuzz tests fizzbuzz.GetFizzBuzz method
 func TestGetFizzBuzz(t *testing.T) {
-	for idx, tc := range getTestCases() {
-		Convey(fmt.Sprintf("Given test case #%v: %+v", idx, tc), t, func() {
+	for index, unitTestCase := range getTestCases() {
+		Convey(fmt.Sprintf("Given test case #%v: %+v", index, unitTestCase), t, func() {
 
-			actualOutput, actualErr := fizzbuzz.GetFizzBuzz(tc.inputStart, tc.inputEnd)
+			actualOutput, actualErr := fizzbuzz.GetFizzBuzz(unitTestCase.inputStart, unitTestCase.inputEnd)
 
-			if tc.expectingError {
+			if unitTestCase.expectingError {
 				So(actualErr, ShouldNotBeNil)
 			} else {
 				So(actualErr, ShouldBeNil)
-				So(actualOutput, ShouldResemble, tc.expectedOutput)
+				So(actualOutput, ShouldResemble, unitTestCase.expectedOutput)
 			}
 		})
 	}
