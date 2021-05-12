@@ -16,12 +16,12 @@ func main() {
 	end := flag.Int("end", 20, "Value (inclusive) to which fizzbuzz counts to")
 	flag.Parse()
 
-	str, err := fizzbuzz.GetFizzBuzz(*start, *end)
+	fizzBuzz, err := fizzbuzz.GetFizzBuzz(*start, *end)
 	if err != nil {
 		log.Fatal(
 			errors.WithMessage(err, "Error in Fizz Buzz"),
 		)
 	}
 
-	log.Printf("%s", str)
+	log.Printf("%s", fizzBuzz)
 }
