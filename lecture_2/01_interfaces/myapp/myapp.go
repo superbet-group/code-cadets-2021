@@ -1,39 +1,26 @@
 package main
 
 import (
-	"fmt"
+	"log"
 
 	"code-cadets-2021/lecture_2/01_interfaces/stacklibfer"
-	"code-cadets-2021/lecture_2/01_interfaces/stacklibfoi"
 )
 
 func main() {
 	s := stacklibfer.New()
 
-	pushPopPrint(s, []int{1, 2, 3, 4})
-
-	s2 := stacklibfoi.New()
-
-	pushPopPrint(s2, []int{1, 2, 3, 4})
+	pushing(s)
 }
 
-func pushPopPrint(stack Stack, numbers []int) {
-	for _, num := range numbers {
-		stack.Push(num)
-	}
+func pushing(pushPopper Pusher) {
+	pushPopper.Push(1)
+	pushPopper.Push(2)
+	pushPopper.Push(3)
+	pushPopper.Push(4)
 
-	for {
-		num, ok := stack.Pop()
-		if !ok {
-			fmt.Println("Done")
-			break
-		}
-
-		fmt.Println("Removed from stack:", num)
-	}
+	log.Println(pushPopper)
 }
 
-type Stack interface {
+type Pusher interface {
 	Push(a int)
-	Pop() (int, bool)
 }
