@@ -3,6 +3,7 @@ package queue
 import (
 	"context"
 	"encoding/json"
+	"log"
 	"os"
 
 	"code-cadets-2021/lecture_2/offerfeed/internal/domain/models"
@@ -22,6 +23,8 @@ func NewOrderedQueue() *OrderedQueue {
 }
 
 func (o *OrderedQueue) Start(ctx context.Context) error {
+	defer log.Println("shutting down ordered queue")
+
 	// on startup, load existing data from disk
 	err := o.loadFromFile()
 	if err != nil {
@@ -44,6 +47,10 @@ func (o *OrderedQueue) Start(ctx context.Context) error {
 
 func (o *OrderedQueue) GetSource() chan<- models.Odd {
 	return o.source
+}
+
+func (o *OrderedQueue) String() string {
+	return "ordered queue"
 }
 
 func (o *OrderedQueue) loadFromFile() error {

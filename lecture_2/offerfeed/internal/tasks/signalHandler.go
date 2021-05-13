@@ -2,7 +2,7 @@ package tasks
 
 import (
 	"context"
-	"fmt"
+	"log"
 	"os"
 	"os/signal"
 	"syscall"
@@ -15,14 +15,19 @@ func NewSignalHandler() *SignalHandler {
 }
 
 func (s *SignalHandler) Start(ctx context.Context) error {
+	defer log.Println("shutting down signal handler")
+
 	signals := make(chan os.Signal, 1)
 	signal.Notify(signals, syscall.SIGINT, syscall.SIGTERM)
 
 	select {
 	case <-signals:
-		fmt.Println("caught signal")
 	case <-ctx.Done():
 	}
 
 	return nil
+}
+
+func (s *SignalHandler) String() string {
+	return "signal handler"
 }

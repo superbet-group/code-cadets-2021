@@ -18,13 +18,13 @@ func RunTasks(tasks ...Task) {
 			defer wg.Done()
 			defer cancel()
 
-			log.Println("starting task:", i)
 			err := task.Start(ctx)
-			log.Println("task finished:", i, "err:", err)
+			log.Printf(`"%s" finished with "%v" error`, task, err)
 		}(i, task)
 	}
 
 	log.Println("all tasks running, waiting")
+	log.Println("- - - - - - - - - - - - - -")
 	wg.Wait()
 	log.Println("all tasks finished")
 }

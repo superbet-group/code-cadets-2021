@@ -2,6 +2,7 @@ package services
 
 import (
 	"context"
+	"log"
 
 	"code-cadets-2021/lecture_2/offerfeed/internal/domain/models"
 )
@@ -25,13 +26,18 @@ func (f *FeedProcessorService) Start(ctx context.Context) error {
 	updates := f.feed.GetUpdates()
 	source := f.queue.GetSource()
 
+	defer close(source)
+	defer log.Println("shutting down feed processor service")
+
 	for update := range updates {
 		source <- update
 	}
 
-	close(source)
-
 	return nil
+}
+
+func (f *FeedProcessorService) String() string {
+	return "feed processor service"
 }
 
 type Feed interface {
