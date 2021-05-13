@@ -45,7 +45,7 @@ func (o *OrderedQueue) Start(ctx context.Context) error {
 	return nil
 }
 
-func (o *OrderedQueue) GetSource() chan<- models.Odd {
+func (o *OrderedQueue) GetSource() chan models.Odd {
 	return o.source
 }
 
@@ -83,9 +83,12 @@ func (o *OrderedQueue) storeToFile() error {
 		return errors.Wrap(err, "store to file, marshal")
 	}
 
-	_, err = f.Write(serializedQueue)
+	n, err := f.Write(serializedQueue)
 	if err != nil {
 		return errors.Wrap(err, "store to file, write")
+
+	} else if len(serializedQueue) != n {
+		return errors.Wrapf(err, "store to file, write len; n: %d, serializedLen: %d", n, len(serializedQueue))
 	}
 
 	err = f.Sync()

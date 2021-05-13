@@ -41,9 +41,9 @@ func (f *FeedProcessorService) String() string {
 }
 
 type Feed interface {
-	GetUpdates() <-chan models.Odd
+	GetUpdates() chan models.Odd
 }
 
 type Queue interface {
-	GetSource() chan<- models.Odd
+	GetSource() chan models.Odd
 }

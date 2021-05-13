@@ -46,7 +46,7 @@ func (a *AxilisOfferFeed) Start(ctx context.Context) error {
 	}
 }
 
-func (a *AxilisOfferFeed) GetUpdates() <-chan models.Odd {
+func (a *AxilisOfferFeed) GetUpdates() chan models.Odd {
 	return a.updates
 }
 
