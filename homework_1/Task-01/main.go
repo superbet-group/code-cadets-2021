@@ -16,6 +16,12 @@ func main() {
 	end := flag.Int("end", 20, "Value (inclusive) to which fizzbuzz counts to")
 	flag.Parse()
 
+	if start == nil || end == nil {
+		log.Fatal(
+			"flag parsing returned nil pointer",
+		)
+	}
+
 	fizzBuzz, err := fizzbuzz.GetFizzBuzz(*start, *end)
 	if err != nil {
 		log.Fatal(
