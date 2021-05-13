@@ -1,4 +1,4 @@
-module code-cadets-2021/lecture_2/offerfeed
+module code-cadets-2021/lecture_2/06_offerfeed
 
 go 1.16
 

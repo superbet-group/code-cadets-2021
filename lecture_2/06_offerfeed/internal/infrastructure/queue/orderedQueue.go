@@ -6,7 +6,7 @@ import (
 	"log"
 	"os"
 
-	"code-cadets-2021/lecture_2/offerfeed/internal/domain/models"
+	"code-cadets-2021/lecture_2/06_offerfeed/internal/domain/models"
 
 	"github.com/pkg/errors"
 )
