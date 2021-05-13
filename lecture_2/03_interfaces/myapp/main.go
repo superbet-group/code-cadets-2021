@@ -3,7 +3,7 @@ package main
 import (
 	"log"
 
-	"code-cadets-2021/lecture_2/02_interfaces/stacklibfer"
+	"code-cadets-2021/lecture_2/03_interfaces/stacklibfer"
 )
 
 func main() {

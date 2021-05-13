@@ -3,8 +3,8 @@ package main
 import (
 	"fmt"
 
-	"code-cadets-2021/lecture_2/02_interfaces/stacklibfer"
-	"code-cadets-2021/lecture_2/02_interfaces/stacklibfoi"
+	"code-cadets-2021/lecture_2/03_interfaces/stacklibfer"
+	"code-cadets-2021/lecture_2/03_interfaces/stacklibfoi"
 )
 
 func main() {
