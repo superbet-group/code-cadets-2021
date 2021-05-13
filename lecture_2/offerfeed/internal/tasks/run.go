@@ -23,10 +23,10 @@ func RunTasks(tasks ...Task) {
 		}(i, task)
 	}
 
-	log.Println("all tasks running, waiting")
-	log.Println("- - - - - - - - - - - - - -")
+	log.Print("all tasks running, waiting")
+	log.Print("- - - - - - - - - - - - - -")
 	wg.Wait()
-	log.Println("all tasks finished")
+	log.Print("all tasks finished")
 }
 
 type Task interface {

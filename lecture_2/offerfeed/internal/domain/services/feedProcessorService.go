@@ -27,7 +27,7 @@ func (f *FeedProcessorService) Start(ctx context.Context) error {
 	source := f.queue.GetSource()
 
 	defer close(source)
-	defer log.Println("shutting down feed processor service")
+	defer log.Printf("shutting down %s", f)
 
 	for update := range updates {
 		source <- update

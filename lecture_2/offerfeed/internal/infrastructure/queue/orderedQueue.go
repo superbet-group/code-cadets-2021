@@ -23,7 +23,7 @@ func NewOrderedQueue() *OrderedQueue {
 }
 
 func (o *OrderedQueue) Start(ctx context.Context) error {
-	defer log.Println("shutting down ordered queue")
+	defer log.Printf("shutting down %s", o)
 
 	// on startup, load existing data from disk
 	err := o.loadFromFile()

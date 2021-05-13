@@ -28,7 +28,7 @@ func NewAxilisOfferFeed(
 
 func (a *AxilisOfferFeed) Start(ctx context.Context) error {
 	defer close(a.updates)
-	defer log.Println("shutting down axilis offer feed")
+	defer log.Printf("shutting down %s", a)
 
 	for {
 		select {
