@@ -1,60 +1,75 @@
 package taxes
 
-import "github.com/pkg/errors"
+import (
+	"sort"
 
-type taxBrackets struct {
-	brackets []float32
-	taxes    []float32
+	"github.com/pkg/errors"
+)
+
+type bracket struct {
+	threshold float32
+	taxRate   float32
 }
 
-func checkTaxBrackets(brackets []float32, taxes []float32) error {
-	if len(brackets) == 0 || brackets[0] != 0 {
-		return errors.New("first bracket is not zero")
+func NewBracket(threshold, taxRate float32) (*bracket, error) {
+	if threshold < 0 {
+		return nil, errors.New("bracket threshold is negative")
 	}
 
-	if len(brackets) != len(taxes) {
-		return errors.New("brackets and taxes don't have the same length")
+	if taxRate < 0 {
+		return nil, errors.New("bracket tax rate is negative")
 	}
 
-	for idx, bracket := range brackets {
-		if idx > 0 && bracket <= brackets[idx - 1] {
-			return errors.New("bracket is not greater than the previous")
+	return &bracket{threshold: threshold, taxRate: taxRate}, nil
+}
+
+func CreateBrackets(thresholds, taxRates []float32) ([]*bracket, error) {
+	if len(thresholds) != len(taxRates) {
+		return nil, errors.New("thresholds and taxRates do not have the same length")
+	}
+
+	var brackets []*bracket
+
+	for idx, threshold := range thresholds {
+		bracket, err := NewBracket(threshold, taxRates[idx])
+
+		if err != nil {
+			return nil, err
 		}
 
-		if taxes[idx] < 0 {
-			return errors.New("tax is negative")
-		}
+		brackets = append(brackets, bracket)
 	}
 
-	return nil
+	return brackets, nil
 }
 
-func NewTaxBrackets(brackets []float32, taxes []float32) (*taxBrackets, error) {
-	if err := checkTaxBrackets(brackets, taxes); err != nil {
-		return nil, err
-	}
-
-	return &taxBrackets{brackets: brackets, taxes: taxes}, nil
-}
-
-func CalculateProgressiveTax(value float32, taxBrackets *taxBrackets) (float32, error) {
+func CalculateProgressiveTax(value float32, brackets []*bracket) (float32, error) {
 	if value < 0 {
 		return 0, errors.New("value is negative")
 	}
 
-	brackets := taxBrackets.brackets
-	taxes := taxBrackets.taxes
+	if len(brackets) == 0 {
+		return 0, nil
+	}
 
-	var finalTax float32 = 0
+	sort.Slice(brackets, func(i, j int) bool {
+		return brackets[i].threshold < brackets[j].threshold
+	})
 
-	for idx, tax := range taxes {
-		if idx + 1 == len(taxes) || value <= brackets[idx + 1] {
-			finalTax += (value - brackets[idx]) * tax
+	if value <= brackets[0].threshold {
+		return value * brackets[0].taxRate, nil
+	}
+
+	tax := brackets[0].threshold * brackets[0].taxRate
+
+	for idx, bracket := range brackets[1:] {
+		if value <= bracket.threshold {
+			tax += (value - brackets[idx].threshold) * bracket.taxRate
 			break
 		}
 
-		finalTax += (brackets[idx + 1] - brackets[idx]) * tax
+		tax += (bracket.threshold - brackets[idx].threshold) * bracket.taxRate
 	}
 
-	return finalTax, nil
+	return tax, nil
 }
