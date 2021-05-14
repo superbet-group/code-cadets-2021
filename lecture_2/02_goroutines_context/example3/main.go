@@ -17,6 +17,7 @@ func main() {
 	go count(mutex, &x)
 	go count(mutex, &x)
 
+	// we could/should use wait group here
 	time.Sleep(time.Second * 2)
 
 	mutex.Lock()
