@@ -49,10 +49,10 @@ func main() {
 	v1, ok1 := <-ch2
 	fmt.Println(v1, ok1)
 
+	// close(ch2)
+
 	v2, ok2 := <-ch2
 	fmt.Println(v2, ok2)
-
-	// close(ch2)
 
 	v3, ok3 := <-ch2
 	fmt.Println(v3, ok3)
