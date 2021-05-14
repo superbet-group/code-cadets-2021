@@ -22,6 +22,8 @@ func NewOrderedQueue() *OrderedQueue {
 }
 
 func (o *OrderedQueue) Start(ctx context.Context) error {
+	// ignore ctx parameter, we will use it later :)
+
 	// initially:
 	// - load existing data from disk
 	//
