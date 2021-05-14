@@ -7,18 +7,20 @@ import (
 )
 
 func main() {
-	s := stacklibfer.New()
+	stack := stacklibfer.New()
 
-	pushing(s)
+	pushing(stack)
 }
 
-func pushing(pushPopper Pusher) {
-	pushPopper.Push(1)
-	pushPopper.Push(2)
-	pushPopper.Push(3)
-	pushPopper.Push(4)
+func pushing(pusher Pusher) {
+	pusher.Push(1)
+	pusher.Push(2)
+	pusher.Push(3)
+	pusher.Push(4)
 
-	log.Println(pushPopper)
+	// I cant access other methods here (pop)
+
+	log.Println(pusher)
 }
 
 type Pusher interface {
