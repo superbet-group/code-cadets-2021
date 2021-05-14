@@ -9,8 +9,7 @@ type FeedProcessorService struct {
 
 func NewFeedProcessorService() *FeedProcessorService {
 	// it should receive "Feed" & "Queue" interfaces through constructor
-	return &FeedProcessorService{
-	}
+	return &FeedProcessorService{}
 }
 
 func (f *FeedProcessorService) Start(ctx context.Context) error {
@@ -30,6 +29,5 @@ func (f *FeedProcessorService) Start(ctx context.Context) error {
 }
 
 // define feed interface here
-
 
 // define queue interface here
