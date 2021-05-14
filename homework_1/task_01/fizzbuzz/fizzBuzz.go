@@ -1,4 +1,4 @@
-package fizzBuzz
+package fizzbuzz
 
 import (
 	"strconv"
@@ -7,7 +7,7 @@ import (
 )
 
 
-func FizzBuzzPlay(start, end int) ([]string, error) {
+func PlayFizzBuzz(start, end int) ([]string, error) {
 	if start <= 0 {
 		return nil, errors.New("invalid value, range start should be greater than 0")
 	}
