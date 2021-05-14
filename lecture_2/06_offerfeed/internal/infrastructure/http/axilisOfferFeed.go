@@ -73,6 +73,8 @@ func (a *AxilisOfferFeed) processResponse(ctx context.Context, response *http.Re
 			Timestamp:   time.Now(),
 		}
 
+		// IMPORTANT SELECT!!!
+		// show an example
 		select {
 		case <-ctx.Done():
 			return
