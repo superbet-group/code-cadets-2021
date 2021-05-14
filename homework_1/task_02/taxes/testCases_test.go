@@ -1,45 +1,63 @@
 package taxes_test
 
+import "math"
+
 type testCase struct {
-	input float64
-	output float64
+	inputAmount float64
+	percentages []float64
+	amounts []float64
+	outputTax float64
 	error bool
 }
 
 func getTestCases() []testCase {
 	return []testCase {
 		{
-			input: 7000,
-			output: 800,
+			inputAmount: 7000,
+			percentages: []float64{0.0, 0.10, 0.20, 0.30},
+			amounts: []float64{1000, 5000, 10000, math.Inf(1)},
+			outputTax: 800,
 			error: false,
 		},
 		{
-			input: 456456,
-			output: 135336.8,
+			inputAmount: 456456,
+			percentages: []float64{0.0, 0.10, 0.20, 0.30},
+			amounts: []float64{1000, 5000, 10000, math.Inf(1)},
+			outputTax: 135336.8,
 			error: false,
 		},
 		{
-			input: -2500,
+			inputAmount: -2500,
+			percentages: []float64{0.0, 0.10, 0.20, 0.30},
+			amounts: []float64{1000, 5000, 10000, math.Inf(1)},
 			error: true,
 		},
 		{
-			input: 123123,
-			output: 35336.9,
+			inputAmount: 123123,
+			percentages: []float64{0.0, 0.10, 0.20, 0.30},
+			amounts: []float64{1000, 5000, 10000, math.Inf(1)},
+			outputTax: 35336.9,
 			error: false,
 		},
 		{
-			input: 1000,
-			output: 0,
+			inputAmount: 1000,
+			percentages: []float64{0.0, 0.10, 0.20, 0.30},
+			amounts: []float64{1000, 5000, 10000, math.Inf(1)},
+			outputTax: 0,
 			error: false,
 		},
 		{
-			input: 6001,
-			output: 600.2,
+			inputAmount: 6001,
+			percentages: []float64{0.0, 0.10, 0.20, 0.30},
+			amounts: []float64{1000, 5000, 10000, math.Inf(1)},
+			outputTax: 600.2,
 			error: false,
 		},
 		{
-			input: 0,
-			output: 0,
+			inputAmount: 0,
+			percentages: []float64{0.0, 0.10, 0.20, 0.30},
+			amounts: []float64{1000, 5000, 10000, math.Inf(1)},
+			outputTax: 0,
 			error: false,
 		},
 	}

@@ -5,59 +5,46 @@ import (
 )
 
 type TaxClass struct {
-	UpperAmount  float64
+	UpperThreshold  float64
 	Percentage float64
 }
 
 
-func checkLevels(taxClasses []TaxClass) bool {
+func validateTaxClasses(taxClasses []TaxClass) error {
 	for idx, val := range taxClasses {
 		if idx != len(taxClasses)-1 {
-			if val.UpperAmount >= taxClasses[idx+1].UpperAmount || val.Percentage >= taxClasses[idx+1].Percentage {
-				return false
+			if val.UpperThreshold >= taxClasses[idx+1].UpperThreshold || val.Percentage >= taxClasses[idx+1].Percentage {
+				return errors.New("tax levels are not compatible")
 			}
 		}
 	}
-	return true
+	return nil
 }
 
-func buildTaxClasses(amounts, percentages []float64) []TaxClass{
-	var classes []TaxClass
 
-	for i :=0; i < len(percentages); i++{
-		tempClass := TaxClass{
-			UpperAmount: amounts[i],
-			Percentage: percentages[i],
-		}
-		classes = append(classes, tempClass)
-	}
-	return classes
-}
 
-func CalculateTax(inputValue float64, percentages, amounts []float64) (float64, error){
+func CalculateTax(inputValue float64, taxClasses []TaxClass) (float64, error){
 
 	if inputValue < 0 {
 		return 0, errors.New("input value is negative")
 	}
-	taxClasses := buildTaxClasses(amounts, percentages)
-	var okLevels bool = checkLevels(taxClasses)
-
-	if !okLevels {
-		return 0, errors.New("tax levels are not compatible")
+	err := validateTaxClasses(taxClasses)
+	if err != nil {
+		return 0, nil
 	}
 
 	var result float64 = 0
 
 	for idx, class := range taxClasses {
-		if class.UpperAmount < inputValue {
+		if class.UpperThreshold < inputValue {
 			if idx != 0 {
-				result += (class.UpperAmount-taxClasses[idx-1].UpperAmount)*class.Percentage
+				result += (class.UpperThreshold-taxClasses[idx-1].UpperThreshold)*class.Percentage
 			} else {
-				result += class.UpperAmount * class.Percentage
+				result += class.UpperThreshold * class.Percentage
 			}
 		} else {
 			if idx != 0 {
-				result += (inputValue - taxClasses[idx-1].UpperAmount) * class.Percentage
+				result += (inputValue - taxClasses[idx-1].UpperThreshold) * class.Percentage
 			} else {
 				result += inputValue * class.Percentage
 			}
