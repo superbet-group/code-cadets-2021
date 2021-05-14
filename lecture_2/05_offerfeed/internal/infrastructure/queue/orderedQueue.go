@@ -1,17 +1,42 @@
 package queue
 
 import (
+	"context"
 	"encoding/json"
 	"os"
+
+	"code-cadets-2021/lecture_2/05_offerfeed/internal/domain/models"
 
 	"github.com/pkg/errors"
 )
 
 type OrderedQueue struct {
+	queue  []models.Odd
+	source chan models.Odd
 }
 
 func NewOrderedQueue() *OrderedQueue {
-	return &OrderedQueue{}
+	return &OrderedQueue{
+		source: make(chan models.Odd, 10),
+	}
+}
+
+func (o *OrderedQueue) Start(ctx context.Context) error {
+	// initially:
+	// - load existing data from disk
+	//
+	// repeatedly:
+	// - read source channel
+	// - update queue slice
+	// - when source channel is closed, exit
+	//
+	// finally:
+	// - store queue slice to disk
+	return nil
+}
+
+func (o *OrderedQueue) GetSource() chan models.Odd {
+	return o.source
 }
 
 func (o *OrderedQueue) loadFromFile() error {
@@ -24,8 +49,7 @@ func (o *OrderedQueue) loadFromFile() error {
 	}
 	defer f.Close()
 
-	// UPDATE THIS LINE!
-	err = json.NewDecoder(f).Decode(nil)
+	err = json.NewDecoder(f).Decode(&o.queue)
 	if err != nil {
 		return errors.Wrap(err, "load from file, decode")
 	}
@@ -40,8 +64,7 @@ func (o *OrderedQueue) storeToFile() error {
 	}
 	defer f.Close()
 
-	// UPDATE THIS LINE!
-	serializedQueue, err := json.MarshalIndent(nil, "", "    ")
+	serializedQueue, err := json.MarshalIndent(o.queue, "", "    ")
 	if err != nil {
 		return errors.Wrap(err, "store to file, marshal")
 	}
