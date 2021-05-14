@@ -11,7 +11,7 @@ type bracket struct {
 	taxRate   float32
 }
 
-func NewBracket(threshold, taxRate float32) (*bracket, error) {
+func newBracket(threshold, taxRate float32) (*bracket, error) {
 	if threshold < 0 {
 		return nil, errors.New("bracket threshold is negative")
 	}
@@ -31,7 +31,7 @@ func CreateBrackets(thresholds, taxRates []float32) ([]*bracket, error) {
 	var brackets []*bracket
 
 	for idx, threshold := range thresholds {
-		bracket, err := NewBracket(threshold, taxRates[idx])
+		bracket, err := newBracket(threshold, taxRates[idx])
 
 		if err != nil {
 			return nil, err
