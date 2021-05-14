@@ -15,6 +15,7 @@ func main() {
 	go fillChan(data)
 	// main goroutine can perform sum function
 	// in that case, we do not need sleep call
+	// main goroutine can execute relevant work!
 	go sumChan(data)
 
 	time.Sleep(time.Second * 2)
