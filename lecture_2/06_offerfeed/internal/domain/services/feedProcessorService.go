@@ -30,6 +30,7 @@ func (f *FeedProcessorService) Start(ctx context.Context) error {
 	defer log.Printf("shutting down %s", f)
 
 	for update := range updates {
+		update.Coefficient *= 2
 		source <- update
 	}
 
