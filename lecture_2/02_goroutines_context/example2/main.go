@@ -2,21 +2,26 @@ package main
 
 import (
 	"fmt"
+	"net/http"
 	"sync"
 	"time"
 )
 
 const (
-	size    = 1000
+	size    = 100
 	threads = 5
+
+	axilisFeedURL = "http://18.193.121.232/axilis-feed"
 )
 
 func main() {
+	httpClient := &http.Client{}
+
 	c1 := initChannel()
-	copy1(c1)
+	httpRequests1(c1, httpClient)
 
 	c2 := initChannel()
-	copy2(c2)
+	httpRequests2(c2, httpClient)
 }
 
 func initChannel() chan int {
@@ -26,43 +31,37 @@ func initChannel() chan int {
 	for i := 0; i < size; i++ {
 		c <- i
 	}
+
 	return c
 }
 
-func copy1(c chan int) {
+func httpRequests1(c chan int, client *http.Client) {
 	t := time.Now()
 
-	c2 := make(chan int, size)
-	for x := range c {
-		// fake http call
-		time.Sleep(time.Millisecond)
-		c2 <- x
+	for range c {
+		client.Get(axilisFeedURL)
 	}
 
-	fmt.Println("copy1 duration", time.Since(t))
+	fmt.Println("httpRequests1 duration", time.Since(t))
 }
 
-func copy2(c chan int) {
+func httpRequests2(c chan int, client *http.Client) {
 	t := time.Now()
 
 	wg := &sync.WaitGroup{}
 	wg.Add(threads)
 
-	c2 := make(chan int, size)
-
 	for i := 0; i < threads; i++ {
 		go func() {
 			defer wg.Done()
 
-			for x := range c {
-				// fake http call
-				time.Sleep(time.Millisecond)
-				c2 <- x
+			for range c {
+				client.Get(axilisFeedURL)
 			}
 		}()
 	}
 
 	wg.Wait()
 
-	fmt.Println("copy2 duration", time.Since(t))
+	fmt.Println("httpRequests2 duration", time.Since(t))
 }
