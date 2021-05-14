@@ -13,8 +13,9 @@ func main() {
 	data := make(chan int)
 
 	go fillChan(data)
+	// main goroutine can perform sum function
+	// in that case, we do not need sleep call
 	go sumChan(data)
-
 
 	time.Sleep(time.Second * 2)
 	fmt.Println("program done")

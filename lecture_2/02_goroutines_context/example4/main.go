@@ -19,7 +19,7 @@ func main() {
 	go fillSlice(mutex, &isDone, &data)
 	go sumSlice(mutex, &isDone, &data)
 
-
+	// we should use wait group here
 	time.Sleep(time.Second * 2)
 	fmt.Println("program done")
 }
