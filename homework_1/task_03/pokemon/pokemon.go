@@ -3,8 +3,8 @@ package pokemon
 import (
 	"encoding/json"
 	"github.com/pkg/errors"
-	"github.com/sethgrid/pester"
 	"io/ioutil"
+	"net/http"
 )
 
 const pokemonAPI = "https://pokeapi.co/api/v2/pokemon/"
@@ -27,9 +27,7 @@ type Output struct {
 }
 
 func GetData(url string) ([]byte, error) {
-	httpClient := pester.New()
-
-	httpResponse, err := httpClient.Get(url)
+	httpResponse, err := http.Get(url)
 	if err != nil {
 		return nil, errors.New("HTTP get towards pokeapi")
 	}
@@ -42,8 +40,8 @@ func GetData(url string) ([]byte, error) {
 	return bodyContent, nil
 }
 
-func FindLocations(input string) ([]byte, error) {
-	data, err := GetData(pokemonAPI + input)
+func FindLocations(nameOrNumber string) ([]byte, error) {
+	data, err := GetData(pokemonAPI + nameOrNumber)
 	if err != nil {
 		return nil, err
 	}
@@ -53,7 +51,7 @@ func FindLocations(input string) ([]byte, error) {
 		return nil, errors.New("unmarshalling the JSON body content")
 	}
 
-	data, err = GetData(pokemonAPI + input + "/encounters")
+	data, err = GetData(pokemonAPI + nameOrNumber + "/encounters")
 	if err != nil {
 		return nil, err
 	}
@@ -70,6 +68,6 @@ func FindLocations(input string) ([]byte, error) {
 		output.Locations = append(output.Locations, value.Location.Name)
 	}
 
-	result, _ := json.MarshalIndent(output, "", "\t")
+	result, err := json.MarshalIndent(output, "", "\t")
 	return result, err
 }
