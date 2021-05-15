@@ -26,14 +26,25 @@ func (o *OrderedQueue) Start(ctx context.Context) error {
 
 	// initially:
 	// - load existing data from disk
-	//
+	err := o.loadFromFile()
+	if err != nil {
+		return err
+	}
+
 	// repeatedly:
 	// - read source channel
 	// - update queue slice
 	// - when source channel is closed, exit
-	//
+	for odd := range o.source {
+		o.queue = append(o.queue, odd)
+	}
+
 	// finally:
 	// - store queue slice to disk
+	err = o.storeToFile()
+	if err != nil {
+		return err
+	}
 	return nil
 }
 
