@@ -2,7 +2,10 @@ package http
 
 import (
 	"context"
+	"encoding/json"
+	"io/ioutil"
 	"net/http"
+	"time"
 
 	"code-cadets-2021/lecture_2/05_offerfeed/internal/domain/models"
 )
@@ -29,7 +32,41 @@ func (a *AxilisOfferFeed) Start(ctx context.Context) error {
 	// - write them to updates channel
 	// - if context is finished, exit and close updates channel
 	// (test your program from cmd/main.go)
-	return nil
+	updates := a.GetUpdates()
+
+	for {
+		select {
+		case <-ctx.Done():
+			close(updates)
+			return nil
+		case <-time.After(time.Millisecond * 200):
+			httpResponse, err := a.httpClient.Get(axilisFeedURL)
+			if err != nil {
+				return err
+			}
+
+			bodyContent, err := ioutil.ReadAll(httpResponse.Body)
+			if err != nil {
+				return err
+			}
+
+			var decodedContent []axilisOfferOdd
+			err = json.Unmarshal(bodyContent, &decodedContent)
+			if err != nil {
+				return err
+			}
+
+			for _, odd := range decodedContent {
+				updates <- models.Odd{
+					Id:          odd.Id,
+					Name:        odd.Name,
+					Match:       odd.Match,
+					Coefficient: odd.Details.Price,
+					Timestamp:   time.Time{},
+				}
+			}
+		}
+	}
 }
 
 func (a *AxilisOfferFeed) GetUpdates() chan models.Odd {

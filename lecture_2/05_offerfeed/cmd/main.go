@@ -6,27 +6,23 @@ import (
 	"time"
 
 	"code-cadets-2021/lecture_2/05_offerfeed/cmd/bootstrap"
-	"code-cadets-2021/lecture_2/05_offerfeed/internal/domain/models"
 )
 
 func main() {
-	queue := bootstrap.NewOrderedQueue()
-	source := queue.GetSource()
+	offerFeed := bootstrap.NewAxilisOfferFeed()
 
-	source <- models.Odd{
-		Id:          "1",
-		Name:        "",
-		Match:       "",
-		Coefficient: 0,
-		Timestamp:   time.Time{},
+	ctx, cancel := context.WithTimeout(context.Background(), time.Second*5)
+	go func() {
+		err := offerFeed.Start(ctx)
+		if err != nil {
+			fmt.Println("There was an error.")
+		}
+	}()
+
+	channel := offerFeed.GetUpdates()
+	for upd := range channel {
+		fmt.Println(upd)
 	}
 
-	close(source)
-
-	err := queue.Start(context.Background())
-	if err != nil {
-		fmt.Println("there was an error")
-	} else {
-		fmt.Println("program finished gracefully")
-	}
+	cancel()
 }
