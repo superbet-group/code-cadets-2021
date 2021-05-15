@@ -32,12 +32,10 @@ func (a *AxilisOfferFeed) Start(ctx context.Context) error {
 	// - write them to updates channel
 	// - if context is finished, exit and close updates channel
 	// (test your program from cmd/main.go)
-	updates := a.GetUpdates()
-
 	for {
 		select {
 		case <-ctx.Done():
-			close(updates)
+			close(a.updates)
 			return nil
 		case <-time.After(time.Millisecond * 200):
 			httpResponse, err := a.httpClient.Get(axilisFeedURL)
@@ -57,7 +55,7 @@ func (a *AxilisOfferFeed) Start(ctx context.Context) error {
 			}
 
 			for _, odd := range decodedContent {
-				updates <- models.Odd{
+				a.updates <- models.Odd{
 					Id:          odd.Id,
 					Name:        odd.Name,
 					Match:       odd.Match,
