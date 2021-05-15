@@ -17,7 +17,7 @@ type OrderedQueue struct {
 
 func NewOrderedQueue() *OrderedQueue {
 	return &OrderedQueue{
-		source: make(chan models.Odd, 10),
+		source: make(chan models.Odd),
 	}
 }
 
