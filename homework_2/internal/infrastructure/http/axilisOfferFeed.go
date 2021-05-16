@@ -19,15 +19,26 @@ type AxilisOfferFeed struct {
 
 func NewAxilisOfferFeed(
 	httpClient http.Client,
+	updates chan models.Odd,
 ) *AxilisOfferFeed {
 	return &AxilisOfferFeed{
 		httpClient: httpClient,
-		updates:    make(chan models.Odd),
+		updates:    updates,
 	}
 }
 
 func (a *AxilisOfferFeed) Start(ctx context.Context) error {
-	defer close(a.updates)
+	defer func() {
+		ok := true
+		select {
+		case _, ok = <-a.updates:
+		default:
+		}
+
+		if ok {
+			close(a.updates)
+		}
+	}()
 	for {
 		select {
 		case <-ctx.Done():

@@ -7,6 +7,6 @@ import (
 	"code-cadets-2021/homework_2/offerfeed/internal/infrastructure/http"
 )
 
-func NewAxilisOfferFeed(updates chan models.Odd) *http.AxilisOfferFeed {
-	return http.NewAxilisOfferFeed(stdHttp.Client{}, updates)
+func NewHomeworkOfferFeed(updates chan models.Odd) *http.HomeworkOfferFeed {
+	return http.NewHomeworkOfferFeed(stdHttp.Client{}, updates)
 }
