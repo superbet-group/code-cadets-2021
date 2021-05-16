@@ -3,6 +3,7 @@ package queue
 import (
 	"context"
 	"encoding/json"
+	"log"
 	"os"
 
 	"code-cadets-2021/lecture_2/05_offerfeed/internal/domain/models"
@@ -17,23 +18,29 @@ type OrderedQueue struct {
 
 func NewOrderedQueue() *OrderedQueue {
 	return &OrderedQueue{
-		source: make(chan models.Odd, 10),
+		source: make(chan models.Odd),
 	}
 }
 
 func (o *OrderedQueue) Start(ctx context.Context) error {
-	// ignore ctx parameter, we will use it later :)
+	err := o.loadFromFile()
+	if err != nil {
+		log.Println("going away")
+		return err
+	}
 
-	// initially:
-	// - load existing data from disk
-	//
-	// repeatedly:
-	// - read source channel
-	// - update queue slice
-	// - when source channel is closed, exit
-	//
-	// finally:
-	// - store queue slice to disk
+	log.Println("starting to read")
+	for element := range o.source {
+		o.queue = append(o.queue, element)
+	}
+	log.Println("stopped reading")
+
+	err = o.storeToFile()
+	if err != nil {
+		return err
+	}
+
+	log.Println("stored")
 	return nil
 }
 
