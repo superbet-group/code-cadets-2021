@@ -1,11 +1,11 @@
 package bootstrap
 
 import (
-	stdhttp "net/http"
+	stdHttp "net/http"
 
 	"code-cadets-2021/homework_2/offerfeed/internal/infrastructure/http"
 )
 
 func NewAxilisOfferFeed() *http.AxilisOfferFeed {
-	return http.NewAxilisOfferFeed(stdhttp.Client{})
+	return http.NewAxilisOfferFeed(stdHttp.Client{})
 }
