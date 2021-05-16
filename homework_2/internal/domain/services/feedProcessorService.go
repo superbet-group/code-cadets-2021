@@ -11,10 +11,10 @@ type FeedProcessorService struct {
 	queue Queue
 }
 
-func NewFeedProcessorService(argFeed Feed, argqueue Queue) *FeedProcessorService {
+func NewFeedProcessorService(feed Feed, queue Queue) *FeedProcessorService {
 	return &FeedProcessorService{
-		feed:  argFeed,
-		queue: argqueue,
+		feed:  feed,
+		queue: queue,
 	}
 }
 
@@ -23,9 +23,9 @@ func (f *FeedProcessorService) Start(ctx context.Context) error {
 	queueChannel := f.queue.GetSource()
 	defer close(queueChannel)
 
-	for val := range feedChannel {
-		val.Coefficient *= 2
-		queueChannel <- val
+	for odd := range feedChannel {
+		odd.Coefficient *= 2
+		queueChannel <- odd
 	}
 
 	return nil
