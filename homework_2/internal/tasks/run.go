@@ -2,13 +2,31 @@ package tasks
 
 import (
 	"context"
+	"log"
+	"sync"
+	"time"
 )
 
 func RunTasks(tasks ...Task) {
-	// run each task in separate goroutine
-	// wait for all tasks to finish
-	//
-	// when first task finishes, signal to the other goroutines that application should stop
+	wg := &sync.WaitGroup{}
+	wg.Add(len(tasks))
+	ctx, cancel := context.WithTimeout(context.Background(), time.Second*5)
+	defer cancel()
+
+	for _, task := range tasks {
+		go func(localTask Task) {
+			defer cancel()
+			defer wg.Done()
+
+			err := localTask.Start(ctx)
+			log.Printf(`"%s" finished with "%v" error`, localTask, err)
+		}(task)
+	}
+
+	log.Print("all tasks running, waiting")
+	log.Print("- - - - - - - - - - - - - -")
+	wg.Wait()
+	log.Print("all tasks finished")
 }
 
 type Task interface {
