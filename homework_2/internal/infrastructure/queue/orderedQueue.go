@@ -3,7 +3,6 @@ package queue
 import (
 	"context"
 	"encoding/json"
-	"log"
 	"os"
 
 	"code-cadets-2021/homework_2/offerfeed/internal/domain/models"
@@ -25,22 +24,18 @@ func NewOrderedQueue() *OrderedQueue {
 func (o *OrderedQueue) Start(ctx context.Context) error {
 	err := o.loadFromFile()
 	if err != nil {
-		log.Println("going away")
 		return err
 	}
 
-	log.Println("starting to read")
 	for element := range o.source {
 		o.queue = append(o.queue, element)
 	}
-	log.Println("stopped reading")
 
 	err = o.storeToFile()
 	if err != nil {
 		return err
 	}
 
-	log.Println("stored")
 	return nil
 }
 
