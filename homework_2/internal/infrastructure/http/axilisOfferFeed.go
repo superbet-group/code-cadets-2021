@@ -43,24 +43,25 @@ func (a *AxilisOfferFeed) Start(ctx context.Context) error {
 				return err
 			}
 
-			var decodedAxilisOdds []axilisOfferOdd
-			err = json.Unmarshal(bodyContent, &decodedAxilisOdds)
+			var decodedOfferOdds []axilisOfferOdd
+			err = json.Unmarshal(bodyContent, &decodedOfferOdds)
 			if err != nil {
 				return err
 			}
 
-			for _, axilisOdd := range decodedAxilisOdds {
-				reMappedOdd := models.Odd{
-					Id:          axilisOdd.Id,
-					Name:        axilisOdd.Name,
-					Match:       axilisOdd.Match,
-					Coefficient: axilisOdd.Details.Price,
+			for _, odd := range decodedOfferOdds {
+				mappedOdd := models.Odd{
+					Id:          odd.Id,
+					Name:        odd.Name,
+					Match:       odd.Match,
+					Coefficient: odd.Details.Price,
+					Timestamp:   time.Now(),
 				}
 
 				select {
 				case <-ctx.Done():
 					return nil
-				case a.updates <- reMappedOdd:
+				case a.updates <- mappedOdd:
 				}
 			}
 		}
