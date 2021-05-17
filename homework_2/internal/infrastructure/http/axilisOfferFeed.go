@@ -27,18 +27,21 @@ func NewAxilisOfferFeed(
 	}
 }
 
-func (a *AxilisOfferFeed) Start(ctx context.Context) error {
-	defer func() {
-		ok := true
-		select {
-		case _, ok = <-a.updates:
-		default:
-		}
+func (a *AxilisOfferFeed) close() {
+	open := true
+	select {
+	case _, open = <-a.updates:
+	default:
+	}
 
-		if ok {
-			close(a.updates)
-		}
-	}()
+	if open {
+		close(a.updates)
+	}
+}
+
+func (a *AxilisOfferFeed) Start(ctx context.Context) error {
+	defer a.close()
+
 	for {
 		select {
 		case <-ctx.Done():
@@ -77,10 +80,6 @@ func (a *AxilisOfferFeed) Start(ctx context.Context) error {
 			}
 		}
 	}
-}
-
-func (a *AxilisOfferFeed) GetUpdates() chan models.Odd {
-	return a.updates
 }
 
 type axilisOfferOdd struct {

@@ -27,24 +27,27 @@ func NewHomeworkOfferFeed(
 	}
 }
 
-func (a *HomeworkOfferFeed) Start(ctx context.Context) error {
-	defer func() {
-		ok := true
-		select {
-		case _, ok = <-a.updates:
-		default:
-		}
+func (h *HomeworkOfferFeed) close() {
+	open := true
+	select {
+	case _, open = <-h.updates:
+	default:
+	}
 
-		if ok {
-			close(a.updates)
-		}
-	}()
+	if open {
+		close(h.updates)
+	}
+}
+
+func (h *HomeworkOfferFeed) Start(ctx context.Context) error {
+	defer h.close()
+
 	for {
 		select {
 		case <-ctx.Done():
 			return nil
 		case <-time.After(time.Second):
-			response, err := a.httpClient.Get(axilisFeedHomeworkURL)
+			response, err := h.httpClient.Get(axilisFeedHomeworkURL)
 			if err != nil {
 				return err
 			}
@@ -56,35 +59,39 @@ func (a *HomeworkOfferFeed) Start(ctx context.Context) error {
 
 			rows := strings.Split(string(bodyContent), "\n")
 			for _, row := range rows {
-				fields := strings.Split(row, ",")
-
-				id := fields[0][2:]
-				name := fields[1]
-				match := fields[2]
-				timestamp := time.Now()
-				coeff, err := strconv.ParseFloat(fields[3], 64)
+				odd, err := parseOdd(row)
 				if err != nil {
 					return err
-				}
-
-				odd := models.Odd{
-					Id:          id,
-					Name:        name,
-					Match:       match,
-					Coefficient: coeff,
-					Timestamp:   timestamp,
 				}
 
 				select {
 				case <-ctx.Done():
 					return nil
-				case a.updates <- odd:
+				case h.updates <- odd:
 				}
 			}
 		}
 	}
 }
 
-func (a *HomeworkOfferFeed) GetUpdates() chan models.Odd {
-	return a.updates
+func parseOdd(row string) (models.Odd, error) {
+	fields := strings.Split(row, ",")
+
+	id := fields[0][2:]
+	name := fields[1]
+	match := fields[2]
+	timestamp := time.Now()
+	coefficient, err := strconv.ParseFloat(fields[3], 64)
+	if err != nil {
+		return models.Odd{}, err
+	}
+
+	odd := models.Odd{
+		Id:          id,
+		Name:        name,
+		Match:       match,
+		Coefficient: coefficient,
+		Timestamp:   timestamp,
+	}
+	return odd, nil
 }

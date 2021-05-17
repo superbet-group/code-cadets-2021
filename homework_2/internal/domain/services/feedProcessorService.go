@@ -7,20 +7,20 @@ import (
 )
 
 type FeedProcessorService struct {
-	feed  Feed
-	queue Queue
+	feedChannel  chan models.Odd
+	queueChannel chan models.Odd
 }
 
-func NewFeedProcessorService(feed Feed, queue Queue) *FeedProcessorService {
+func NewFeedProcessorService(feed chan models.Odd, queue chan models.Odd) *FeedProcessorService {
 	return &FeedProcessorService{
-		feed:  feed,
-		queue: queue,
+		feedChannel:  feed,
+		queueChannel: queue,
 	}
 }
 
 func (f *FeedProcessorService) Start(ctx context.Context) error {
-	feedChannel := f.feed.GetUpdates()
-	queueChannel := f.queue.GetSource()
+	feedChannel := f.feedChannel
+	queueChannel := f.queueChannel
 	defer close(queueChannel)
 
 	for odd := range feedChannel {
@@ -29,12 +29,4 @@ func (f *FeedProcessorService) Start(ctx context.Context) error {
 	}
 
 	return nil
-}
-
-type Feed interface {
-	GetUpdates() chan models.Odd
-}
-
-type Queue interface {
-	GetSource() chan models.Odd
 }

@@ -10,15 +10,17 @@ import (
 
 func main() {
 	updatesChannel := make(chan models.Odd)
+	queueChannel := make(chan models.Odd)
 
 	offerFeed := bootstrap.NewAxilisOfferFeed(updatesChannel)
 	homeworkFeed := bootstrap.NewHomeworkOfferFeed(updatesChannel)
 
-	queue := bootstrap.NewOrderedQueue()
-	service := bootstrap.NewProcessingService(offerFeed, queue)
+	queue := bootstrap.NewOrderedQueue(queueChannel)
+
+	service := bootstrap.NewProcessingService(updatesChannel, queueChannel)
+
 	signalHandler := bootstrap.NewSignalHandler()
 
 	tasks.RunTasks(signalHandler, offerFeed, homeworkFeed, service, queue)
-
 	fmt.Println("program finished gracefully")
 }
