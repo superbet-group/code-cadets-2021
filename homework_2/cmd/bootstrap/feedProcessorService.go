@@ -5,6 +5,6 @@ import (
 	"code-cadets-2021/homework_2/offerfeed/internal/domain/services"
 )
 
-func NewProcessingService(feed chan models.Odd, queue chan models.Odd) *services.FeedProcessorService {
+func NewProcessorService(feed chan models.Odd, queue chan models.Odd) *services.FeedProcessorService {
 	return services.NewFeedProcessorService(feed, queue)
 }

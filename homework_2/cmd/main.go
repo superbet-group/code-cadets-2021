@@ -17,7 +17,7 @@ func main() {
 
 	queue := bootstrap.NewOrderedQueue(queueChannel)
 
-	service := bootstrap.NewProcessingService(updatesChannel, queueChannel)
+	service := bootstrap.NewProcessorService(updatesChannel, queueChannel)
 
 	signalHandler := bootstrap.NewSignalHandler()
 
