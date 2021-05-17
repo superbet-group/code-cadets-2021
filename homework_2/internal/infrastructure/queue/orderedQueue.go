@@ -39,10 +39,6 @@ func (o *OrderedQueue) Start(ctx context.Context) error {
 	return nil
 }
 
-func (o *OrderedQueue) GetSource() chan models.Odd {
-	return o.source
-}
-
 func (o *OrderedQueue) loadFromFile() error {
 	f, err := os.Open("queue.txt")
 	if os.IsNotExist(err) {
