@@ -27,6 +27,7 @@ func NewAxilisOfferFeed(
 	}
 }
 
+// close makes sure to close the updates channel only if it isn't already closed
 func (a *AxilisOfferFeed) close() {
 	open := true
 	select {
@@ -39,6 +40,7 @@ func (a *AxilisOfferFeed) close() {
 	}
 }
 
+// Start reads Get http response from axilisFeedURL, serializes the data into an Odd model and sends it to updates channel
 func (a *AxilisOfferFeed) Start(ctx context.Context) error {
 	defer a.close()
 
@@ -82,6 +84,7 @@ func (a *AxilisOfferFeed) Start(ctx context.Context) error {
 	}
 }
 
+// axilisOfferOdd models Get response from axilisFeedURL
 type axilisOfferOdd struct {
 	Id      string
 	Name    string

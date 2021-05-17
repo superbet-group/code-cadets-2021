@@ -27,6 +27,7 @@ func NewHomeworkOfferFeed(
 	}
 }
 
+// close makes sure to close the updates channel only if it isn't already closed
 func (h *HomeworkOfferFeed) close() {
 	open := true
 	select {
@@ -39,6 +40,7 @@ func (h *HomeworkOfferFeed) close() {
 	}
 }
 
+// Start reads Get http response from axilisFeedHomeworkURL and sends it to updates channel
 func (h *HomeworkOfferFeed) Start(ctx context.Context) error {
 	defer h.close()
 

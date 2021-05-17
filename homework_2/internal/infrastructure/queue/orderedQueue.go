@@ -21,6 +21,7 @@ func NewOrderedQueue(source chan models.Odd) *OrderedQueue {
 	}
 }
 
+// Start reads elements from source channel and appends them to queue.txt file
 func (o *OrderedQueue) Start(ctx context.Context) error {
 	err := o.loadFromFile()
 	if err != nil {
