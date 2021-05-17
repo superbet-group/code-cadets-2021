@@ -1,10 +1,9 @@
 package bootstrap
 
 import (
-	"code-cadets-2021/homework_2/offerfeed/internal/domain/models"
 	"code-cadets-2021/homework_2/offerfeed/internal/domain/services"
 )
 
-func NewProcessorService(feed chan models.Odd, queue chan models.Odd) *services.FeedProcessorService {
+func NewProcessorService(feed services.Feed, queue services.Queue) *services.FeedProcessorService {
 	return services.NewFeedProcessorService(feed, queue)
 }

@@ -1,7 +1,6 @@
-package http
+package offerFeeds
 
 import (
-	"context"
 	"encoding/json"
 	"io/ioutil"
 	"net/http"
@@ -27,27 +26,10 @@ func NewAxilisOfferFeed(
 	}
 }
 
-// close makes sure to close the updates channel only if it isn't already closed
-func (a *AxilisOfferFeed) close() {
-	open := true
-	select {
-	case _, open = <-a.updates:
-	default:
-	}
-
-	if open {
-		close(a.updates)
-	}
-}
-
 // Start reads Get http response from axilisFeedURL, serializes the data into an Odd model and sends it to updates channel
-func (a *AxilisOfferFeed) Start(ctx context.Context) error {
-	defer a.close()
-
+func (a *AxilisOfferFeed) Start() error {
 	for {
 		select {
-		case <-ctx.Done():
-			return nil
 		case <-time.After(time.Second):
 			response, err := a.httpClient.Get(axilisFeedURL)
 			if err != nil {
@@ -74,14 +56,14 @@ func (a *AxilisOfferFeed) Start(ctx context.Context) error {
 					Timestamp:   time.Now(),
 				}
 
-				select {
-				case <-ctx.Done():
-					return nil
-				case a.updates <- mappedOdd:
-				}
+				a.updates <- mappedOdd
 			}
 		}
 	}
+}
+
+func (a *AxilisOfferFeed) GetUpdates() chan models.Odd {
+	return a.updates
 }
 
 // axilisOfferOdd models Get response from axilisFeedURL

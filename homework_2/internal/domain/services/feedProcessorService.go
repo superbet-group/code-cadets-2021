@@ -8,21 +8,21 @@ import (
 
 // FeedProcessorService gets values from feedChannel, processes them, and finally sends them to queueChannel
 type FeedProcessorService struct {
-	feedChannel  chan models.Odd
-	queueChannel chan models.Odd
+	feed  Feed
+	queue Queue
 }
 
-func NewFeedProcessorService(feed chan models.Odd, queue chan models.Odd) *FeedProcessorService {
+func NewFeedProcessorService(feed Feed, queue Queue) *FeedProcessorService {
 	return &FeedProcessorService{
-		feedChannel:  feed,
-		queueChannel: queue,
+		feed:  feed,
+		queue: queue,
 	}
 }
 
 // Start reads elements from input channel, multiplies the coefficient by 2, and sends it to output channel
 func (f *FeedProcessorService) Start(ctx context.Context) error {
-	feedChannel := f.feedChannel
-	queueChannel := f.queueChannel
+	feedChannel := f.feed.GetUpdates()
+	queueChannel := f.queue.GetSource()
 	defer close(queueChannel)
 
 	for odd := range feedChannel {
@@ -31,4 +31,12 @@ func (f *FeedProcessorService) Start(ctx context.Context) error {
 	}
 
 	return nil
+}
+
+type Feed interface {
+	GetUpdates() chan models.Odd
+}
+
+type Queue interface {
+	GetSource() chan models.Odd
 }

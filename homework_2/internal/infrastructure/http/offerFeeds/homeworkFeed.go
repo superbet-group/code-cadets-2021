@@ -1,13 +1,13 @@
-package http
+package offerFeeds
 
 import (
-	"code-cadets-2021/homework_2/offerfeed/internal/domain/models"
-	"context"
 	"io/ioutil"
 	"net/http"
 	"strconv"
 	"strings"
 	"time"
+
+	"code-cadets-2021/homework_2/offerfeed/internal/domain/models"
 )
 
 const axilisFeedHomeworkURL = "http://18.193.121.232/axilis-feed-2"
@@ -27,27 +27,10 @@ func NewHomeworkOfferFeed(
 	}
 }
 
-// close makes sure to close the updates channel only if it isn't already closed
-func (h *HomeworkOfferFeed) close() {
-	open := true
-	select {
-	case _, open = <-h.updates:
-	default:
-	}
-
-	if open {
-		close(h.updates)
-	}
-}
-
 // Start reads Get http response from axilisFeedHomeworkURL and sends it to updates channel
-func (h *HomeworkOfferFeed) Start(ctx context.Context) error {
-	defer h.close()
-
+func (h *HomeworkOfferFeed) Start() error {
 	for {
 		select {
-		case <-ctx.Done():
-			return nil
 		case <-time.After(time.Second):
 			response, err := h.httpClient.Get(axilisFeedHomeworkURL)
 			if err != nil {
@@ -66,14 +49,14 @@ func (h *HomeworkOfferFeed) Start(ctx context.Context) error {
 					return err
 				}
 
-				select {
-				case <-ctx.Done():
-					return nil
-				case h.updates <- odd:
-				}
+				h.updates <- odd
 			}
 		}
 	}
+}
+
+func (h *HomeworkOfferFeed) GetUpdates() chan models.Odd {
+	return h.updates
 }
 
 func parseOdd(row string) (models.Odd, error) {

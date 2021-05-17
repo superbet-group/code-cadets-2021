@@ -19,7 +19,7 @@ func RunTasks(tasks ...Task) {
 			defer wg.Done()
 
 			err := localTask.Start(ctx)
-			log.Printf(`"%s" finished with "%v" error`, localTask, err)
+			log.Printf(`finished a task with "%v" error`, err)
 		}(task)
 	}
 

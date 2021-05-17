@@ -5,9 +5,9 @@ import (
 	"encoding/json"
 	"os"
 
-	"code-cadets-2021/homework_2/offerfeed/internal/domain/models"
-
 	"github.com/pkg/errors"
+
+	"code-cadets-2021/homework_2/offerfeed/internal/domain/models"
 )
 
 type OrderedQueue struct {
@@ -84,4 +84,8 @@ func (o *OrderedQueue) storeToFile() error {
 	}
 
 	return nil
+}
+
+func (o *OrderedQueue) GetSource() chan models.Odd {
+	return o.source
 }
