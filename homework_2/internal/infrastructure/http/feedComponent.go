@@ -15,10 +15,13 @@ type FeedComponent struct {
 }
 
 type OfferFeed interface {
+	// Start begins feeding offers to updates channel of this OfferFeed
 	Start() error
+	// GetUpdates returns updates channel of this OfferFeed
 	GetUpdates() chan models.Odd
 }
 
+// validateOfferFeeds validates that all OfferFeeds have the same updates channel
 func validateOfferFeeds(feeds []OfferFeed) (chan models.Odd, error) {
 
 	updates := feeds[0].GetUpdates()

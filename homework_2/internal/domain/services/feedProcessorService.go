@@ -34,9 +34,11 @@ func (f *FeedProcessorService) Start(ctx context.Context) error {
 }
 
 type Feed interface {
+	// GetUpdates returns updates channel of this Feed
 	GetUpdates() chan models.Odd
 }
 
 type Queue interface {
+	// GetSource returns source channel of this Queue
 	GetSource() chan models.Odd
 }
