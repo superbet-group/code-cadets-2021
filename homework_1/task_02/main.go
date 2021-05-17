@@ -20,13 +20,13 @@ func getIncome() (float64, error) {
 	return income, nil
 }
 
-func buildTaxClasses(amounts, percentages []float64) []taxes.TaxClass{
+func buildTaxClasses(amounts, percentages []float64) []taxes.TaxClass {
 	var classes []taxes.TaxClass
 
-	for i :=0; i < len(percentages); i++{
+	for i := 0; i < len(percentages); i++ {
 		tempClass := taxes.TaxClass{
 			UpperThreshold: amounts[i],
-			Percentage: percentages[i],
+			Percentage:     percentages[i],
 		}
 		classes = append(classes, tempClass)
 	}

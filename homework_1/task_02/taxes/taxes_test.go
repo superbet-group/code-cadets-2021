@@ -12,13 +12,13 @@ func TestCalculateTax(t *testing.T) {
 	for idx, tc := range getTestCases() {
 		Convey(fmt.Sprintf("Given test case #%v: %+v", idx, tc), t, func() {
 
-			output, err := taxes.CalculateTax(tc.input, tc.percentages, tc.amounts)
+			output, err := taxes.CalculateTax(tc.inputAmount, tc.class)
 
 			if tc.error {
 				So(err, ShouldNotBeNil)
 			} else {
 				So(err, ShouldBeNil)
-				So(output, ShouldResemble, tc.output)
+				So(output, ShouldResemble, tc.outputTax)
 			}
 		})
 	}

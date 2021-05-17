@@ -5,10 +5,9 @@ import (
 )
 
 type TaxClass struct {
-	UpperThreshold  float64
-	Percentage float64
+	UpperThreshold float64
+	Percentage     float64
 }
-
 
 func validateTaxClasses(taxClasses []TaxClass) error {
 	for idx, val := range taxClasses {
@@ -21,9 +20,7 @@ func validateTaxClasses(taxClasses []TaxClass) error {
 	return nil
 }
 
-
-
-func CalculateTax(inputValue float64, taxClasses []TaxClass) (float64, error){
+func CalculateTax(inputValue float64, taxClasses []TaxClass) (float64, error) {
 
 	if inputValue < 0 {
 		return 0, errors.New("input value is negative")
@@ -38,7 +35,7 @@ func CalculateTax(inputValue float64, taxClasses []TaxClass) (float64, error){
 	for idx, class := range taxClasses {
 		if class.UpperThreshold < inputValue {
 			if idx != 0 {
-				result += (class.UpperThreshold-taxClasses[idx-1].UpperThreshold)*class.Percentage
+				result += (class.UpperThreshold - taxClasses[idx-1].UpperThreshold) * class.Percentage
 			} else {
 				result += class.UpperThreshold * class.Percentage
 			}
