@@ -10,12 +10,16 @@ import (
 func main() {
 	signalHandler := bootstrap.SignalHandler()
 
-	feed := bootstrap.AxilisOfferFeed()
+	axilisOfferFeed := bootstrap.AxilisOfferFeed()
+	notAJsonFeed := bootstrap.NotAJsonFeed()
+
+	feedMerger := bootstrap.FeedMerger(axilisOfferFeed, notAJsonFeed)
+
 	queue := bootstrap.OrderedQueue()
 
-	processingService := bootstrap.FeedProcessingService(feed, queue)
+	processingService := bootstrap.FeedProcessingService(feedMerger, queue)
 
-	tasks.RunTasks(signalHandler, feed, queue, processingService)
+	tasks.RunTasks(signalHandler, feedMerger, axilisOfferFeed, notAJsonFeed, queue, processingService)
 
 	fmt.Println("program finished gracefully")
 }

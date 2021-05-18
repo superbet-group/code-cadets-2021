@@ -18,11 +18,10 @@ type AxilisOfferFeed struct {
 }
 
 func NewAxilisOfferFeed(httpClient *http.Client) *AxilisOfferFeed {
-	return &AxilisOfferFeed{updates: make(chan models.Odd), httpClient: httpClient}
+	return &AxilisOfferFeed{httpClient: httpClient}
 }
 
 func (a *AxilisOfferFeed) Start(ctx context.Context) error {
-	defer close(a.updates)
 	defer log.Printf("shutting down %s", a)
 
 	for {
@@ -31,6 +30,10 @@ func (a *AxilisOfferFeed) Start(ctx context.Context) error {
 			return nil
 
 		case <-time.After(time.Second * 3):
+			if a.updates == nil {
+				continue
+			}
+
 			response, err := a.httpClient.Get(axilisFeedURL)
 			if err != nil {
 				log.Println("axilis offer feed, http get", err)
@@ -77,6 +80,10 @@ func (a *AxilisOfferFeed) processResponse(ctx context.Context, response *http.Re
 			// do nothing
 		}
 	}
+}
+
+func (a *AxilisOfferFeed) SetUpdates(updates chan models.Odd) {
+	a.updates = updates
 }
 
 type axilisOfferOdd struct {
