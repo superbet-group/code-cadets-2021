@@ -14,6 +14,8 @@ func validateTaxClasses(taxClasses []TaxClass) error {
 		if idx != len(taxClasses)-1 {
 			if val.UpperThreshold >= taxClasses[idx+1].UpperThreshold || val.Percentage >= taxClasses[idx+1].Percentage {
 				return errors.New("tax levels are not compatible")
+			} else if val.UpperThreshold < 0 {
+				return errors.New("tax levels are not compatible")
 			}
 		}
 	}
@@ -27,7 +29,7 @@ func CalculateTax(inputValue float64, taxClasses []TaxClass) (float64, error) {
 	}
 	err := validateTaxClasses(taxClasses)
 	if err != nil {
-		return 0, nil
+		return 0, err
 	}
 
 	var result float64 = 0
