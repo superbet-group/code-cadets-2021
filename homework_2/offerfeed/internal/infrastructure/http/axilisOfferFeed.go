@@ -17,13 +17,8 @@ type AxilisOfferFeed struct {
 	httpClient *http.Client
 }
 
-func NewAxilisOfferFeed(
-	httpClient *http.Client,
-) *AxilisOfferFeed {
-	return &AxilisOfferFeed{
-		updates:    make(chan models.Odd),
-		httpClient: httpClient,
-	}
+func NewAxilisOfferFeed(httpClient *http.Client) *AxilisOfferFeed {
+	return &AxilisOfferFeed{updates: make(chan models.Odd), httpClient: httpClient}
 }
 
 func (a *AxilisOfferFeed) Start(ctx context.Context) error {

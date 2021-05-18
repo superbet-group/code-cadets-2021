@@ -12,14 +12,8 @@ type FeedProcessorService struct {
 	queue Queue
 }
 
-func NewFeedProcessorService(
-	feed Feed,
-	queue Queue,
-) *FeedProcessorService {
-	return &FeedProcessorService{
-		feed:  feed,
-		queue: queue,
-	}
+func NewFeedProcessorService(feed Feed, queue Queue) *FeedProcessorService {
+	return &FeedProcessorService{feed:  feed, queue: queue}
 }
 
 func (f *FeedProcessorService) Start(ctx context.Context) error {

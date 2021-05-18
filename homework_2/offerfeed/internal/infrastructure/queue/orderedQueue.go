@@ -3,12 +3,11 @@ package queue
 import (
 	"context"
 	"encoding/json"
+	"github.com/pkg/errors"
 	"log"
 	"os"
 
 	"code-cadets-2021/homework_2/offerfeed/internal/domain/models"
-
-	"github.com/pkg/errors"
 )
 
 type OrderedQueue struct {

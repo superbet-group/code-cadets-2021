@@ -12,9 +12,9 @@ func main() {
 
 	feed := bootstrap.AxilisOfferFeed()
 	queue := bootstrap.OrderedQueue()
+
 	processingService := bootstrap.FeedProcessingService(feed, queue)
 
-	// blocking call, start "the application"
 	tasks.RunTasks(signalHandler, feed, queue, processingService)
 
 	fmt.Println("program finished gracefully")
