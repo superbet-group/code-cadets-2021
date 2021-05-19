@@ -1,6 +1,7 @@
 package offerFeeds
 
 import (
+	"context"
 	"io/ioutil"
 	"net/http"
 	"strconv"
@@ -28,9 +29,11 @@ func NewHomeworkOfferFeed(
 }
 
 // Start reads Get http response from axilisFeedHomeworkURL and sends it to updates channel
-func (h *HomeworkOfferFeed) Start() error {
+func (h *HomeworkOfferFeed) Start(ctx context.Context) error {
 	for {
 		select {
+		case <-ctx.Done():
+			return nil
 		case <-time.After(time.Second):
 			response, err := h.httpClient.Get(axilisFeedHomeworkURL)
 			if err != nil {
@@ -49,7 +52,12 @@ func (h *HomeworkOfferFeed) Start() error {
 					return err
 				}
 
-				h.updates <- odd
+				select {
+				case <-ctx.Done():
+					return nil
+				case h.updates <- odd:
+					// do nothing
+				}
 			}
 		}
 	}

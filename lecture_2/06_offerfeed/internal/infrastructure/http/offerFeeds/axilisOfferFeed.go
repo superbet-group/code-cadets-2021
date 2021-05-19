@@ -1,6 +1,7 @@
 package offerFeeds
 
 import (
+	"context"
 	"encoding/json"
 	"io/ioutil"
 	"net/http"
@@ -27,9 +28,11 @@ func NewAxilisOfferFeed(
 }
 
 // Start reads Get http response from axilisFeedURL, serializes the data into an Odd model and sends it to updates channel
-func (a *AxilisOfferFeed) Start() error {
+func (a *AxilisOfferFeed) Start(ctx context.Context) error {
 	for {
 		select {
+		case <-ctx.Done():
+			return nil
 		case <-time.After(time.Second):
 			response, err := a.httpClient.Get(axilisFeedURL)
 			if err != nil {
@@ -56,7 +59,12 @@ func (a *AxilisOfferFeed) Start() error {
 					Timestamp:   time.Now(),
 				}
 
-				a.updates <- mappedOdd
+				select {
+				case <-ctx.Done():
+					return nil
+				case a.updates <- mappedOdd:
+					// do nothing
+				}
 			}
 		}
 	}
