@@ -49,7 +49,7 @@ func (h *HomeworkOfferFeed) Start(ctx context.Context) error {
 			for _, row := range rows {
 				odd, err := parseOdd(row)
 				if err != nil {
-					return err
+					continue
 				}
 
 				select {
