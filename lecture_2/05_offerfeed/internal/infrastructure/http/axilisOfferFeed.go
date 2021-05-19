@@ -2,7 +2,10 @@ package http
 
 import (
 	"context"
+	"encoding/json"
+	"log"
 	"net/http"
+	"time"
 
 	"code-cadets-2021/lecture_2/05_offerfeed/internal/domain/models"
 )
@@ -24,12 +27,53 @@ func NewAxilisOfferFeed(
 }
 
 func (a *AxilisOfferFeed) Start(ctx context.Context) error {
-	// repeatedly:
-	// - get odds from HTTP server
-	// - write them to updates channel
-	// - if context is finished, exit and close updates channel
-	// (test your program from cmd/main.go)
-	return nil
+	defer close(a.updates)
+	defer log.Printf("shutting down %s", a)
+
+	for {
+		select {
+		case <-ctx.Done():
+			return nil
+
+		case <-time.After(time.Second * 3):
+			response, err := a.httpClient.Get(axilisFeedURL)
+			if err != nil {
+				log.Println("axilis offer feed, http get", err)
+				continue
+			}
+			a.processResponse(ctx, response)
+		}
+	}
+}
+
+func (a *AxilisOfferFeed) processResponse(ctx context.Context, response *http.Response) {
+	defer response.Body.Close()
+
+	var axilisOfferOdds []axilisOfferOdd
+	err := json.NewDecoder(response.Body).Decode(&axilisOfferOdds)
+	if err != nil {
+		log.Println("axilis offer feed, json decode", err)
+		return
+	}
+
+	for _, axilisOdd := range axilisOfferOdds {
+		odd := models.Odd{
+			Id:          axilisOdd.Id,
+			Name:        axilisOdd.Name,
+			Match:       axilisOdd.Match,
+			Coefficient: axilisOdd.Details.Price,
+			Timestamp:   time.Now(),
+		}
+
+		// IMPORTANT SELECT!!!
+		// show an example
+		select {
+		case <-ctx.Done():
+			return
+		case a.updates <- odd:
+			// do nothing
+		}
+	}
 }
 
 func (a *AxilisOfferFeed) GetUpdates() chan models.Odd {
