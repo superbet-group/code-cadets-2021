@@ -7,6 +7,6 @@ import (
 	"code-cadets-2021/lecture_2/06_offerfeed/internal/infrastructure/http/offerFeeds"
 )
 
-func AxilisOfferFeed(updates chan models.Odd) *offerFeeds.AxilisOfferFeed {
-	return offerFeeds.NewAxilisOfferFeed(&stdHttp.Client{}, updates)
+func AxilisOfferFeed(httpClient *stdHttp.Client, updates chan models.Odd) *offerFeeds.AxilisOfferFeed {
+	return offerFeeds.NewAxilisOfferFeed(httpClient, updates)
 }

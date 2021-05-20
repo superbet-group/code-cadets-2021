@@ -7,6 +7,6 @@ import (
 	"code-cadets-2021/lecture_2/06_offerfeed/internal/infrastructure/http/offerFeeds"
 )
 
-func HomeworkOfferFeed(updates chan models.Odd) *offerFeeds.HomeworkOfferFeed {
-	return offerFeeds.NewHomeworkOfferFeed(&stdHttp.Client{}, updates)
+func HomeworkOfferFeed(httpClient *stdHttp.Client, updates chan models.Odd) *offerFeeds.HomeworkOfferFeed {
+	return offerFeeds.NewHomeworkOfferFeed(httpClient, updates)
 }

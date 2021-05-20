@@ -11,11 +11,12 @@ import (
 )
 
 func main() {
+	httpClient := bootstrap.HttpClient()
 	updatesChannel := make(chan models.Odd)
 	queueChannel := make(chan models.Odd)
 
-	offerFeed := bootstrap.AxilisOfferFeed(updatesChannel)
-	homeworkFeed := bootstrap.HomeworkOfferFeed(updatesChannel)
+	offerFeed := bootstrap.AxilisOfferFeed(httpClient, updatesChannel)
+	homeworkFeed := bootstrap.HomeworkOfferFeed(httpClient, updatesChannel)
 	feedComponent, err := bootstrap.FeedComponent([]http.OfferFeed{offerFeed, homeworkFeed})
 	if err != nil {
 		log.Fatalln(err, "error while constructing OfferFeedComponent")
