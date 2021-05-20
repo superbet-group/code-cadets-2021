@@ -3,6 +3,7 @@ package http
 import (
 	"context"
 	"log"
+	"sync"
 
 	"code-cadets-2021/lecture_2/06_offerfeed/internal/domain/models"
 )
@@ -14,7 +15,7 @@ type FeedComponent struct {
 
 type OfferFeed interface {
 	// Start begins feeding offers to updates channel of this OfferFeed
-	Start() error
+	Start(ctx context.Context) error
 	// GetUpdates returns updates channel of this OfferFeed
 	GetUpdates() chan models.Odd
 }
@@ -32,17 +33,18 @@ func (o *FeedComponent) Start(ctx context.Context) error {
 	defer close(o.updates)
 
 	feeds := o.feeds
+	wg := sync.WaitGroup{}
+	wg.Add(len(feeds))
 
 	for _, feed := range feeds {
 		go func(localFeed OfferFeed) {
-			err := localFeed.Start()
+			defer wg.Done()
+			err := localFeed.Start(ctx)
 			log.Printf(`"finished an offer feed with "%v" error`, err)
 		}(feed)
 	}
 
-	select {
-	case <-ctx.Done():
-	}
+	wg.Wait()
 
 	return nil
 }
