@@ -21,11 +21,12 @@ type OfferFeed interface {
 }
 
 func NewFeedComponent(
+	updates chan models.Odd,
 	feeds []OfferFeed,
 ) (*FeedComponent, error) {
 	return &FeedComponent{
 		feeds:   feeds,
-		updates: feeds[0].GetUpdates(),
+		updates: updates,
 	}, nil
 }
 

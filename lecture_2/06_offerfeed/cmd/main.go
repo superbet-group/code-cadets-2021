@@ -6,7 +6,6 @@ import (
 
 	"code-cadets-2021/lecture_2/06_offerfeed/cmd/bootstrap"
 	"code-cadets-2021/lecture_2/06_offerfeed/internal/domain/models"
-	"code-cadets-2021/lecture_2/06_offerfeed/internal/infrastructure/http"
 	"code-cadets-2021/lecture_2/06_offerfeed/internal/tasks"
 )
 
@@ -17,7 +16,7 @@ func main() {
 
 	offerFeed := bootstrap.AxilisOfferFeed(httpClient, updatesChannel)
 	homeworkFeed := bootstrap.HomeworkOfferFeed(httpClient, updatesChannel)
-	feedComponent, err := bootstrap.FeedComponent([]http.OfferFeed{offerFeed, homeworkFeed})
+	feedComponent, err := bootstrap.FeedComponent(updatesChannel, offerFeed, homeworkFeed)
 	if err != nil {
 		log.Fatalln(err, "error while constructing OfferFeedComponent")
 	}
