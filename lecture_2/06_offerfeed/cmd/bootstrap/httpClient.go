@@ -1,11 +1,10 @@
 package bootstrap
 
 import (
+	stdhttp "net/http"
 	"time"
-
-	stdHttp "net/http"
 )
 
-func HttpClient() *stdHttp.Client {
-	return &stdHttp.Client{Timeout: time.Second * 5}
+func HttpClient() *stdhttp.Client {
+	return &stdhttp.Client{Timeout: time.Second * 5}
 }

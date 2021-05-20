@@ -6,9 +6,9 @@ import (
 	"log"
 	"os"
 
-	"code-cadets-2021/lecture_2/06_offerfeed/internal/domain/models"
-
 	"github.com/pkg/errors"
+
+	"code-cadets-2021/lecture_2/06_offerfeed/internal/domain/models"
 )
 
 type OrderedQueue struct {

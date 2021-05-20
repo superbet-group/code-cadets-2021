@@ -1,12 +1,12 @@
 package main
 
 import (
-	"code-cadets-2021/lecture_2/06_offerfeed/internal/domain/models"
-	"code-cadets-2021/lecture_2/06_offerfeed/internal/infrastructure/http"
 	"fmt"
 	"log"
 
 	"code-cadets-2021/lecture_2/06_offerfeed/cmd/bootstrap"
+	"code-cadets-2021/lecture_2/06_offerfeed/internal/domain/models"
+	"code-cadets-2021/lecture_2/06_offerfeed/internal/infrastructure/http"
 	"code-cadets-2021/lecture_2/06_offerfeed/internal/tasks"
 )
 
