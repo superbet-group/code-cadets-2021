@@ -1,4 +1,4 @@
-package offerFeeds
+package offerfeeds
 
 import (
 	"context"
