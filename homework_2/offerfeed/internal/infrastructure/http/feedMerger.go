@@ -3,6 +3,7 @@ package http
 import (
 	"context"
 	"log"
+	"sync"
 
 	"code-cadets-2021/homework_2/offerfeed/internal/domain/models"
 )
@@ -20,12 +21,25 @@ func (f *FeedMerger) Start(ctx context.Context) error {
 	defer close(f.updates)
 	defer log.Printf("shutting down %s", f)
 
-	for {
-		select {
-		case <-ctx.Done():
-			return nil
+	wg := &sync.WaitGroup{}
+
+	output := func(c chan models.Odd) {
+		for odd := range c {
+			f.updates <- odd
 		}
+
+		wg.Done()
 	}
+
+	wg.Add(len(f.feeds))
+
+	for _, feed := range f.feeds {
+		go output(feed.GetUpdates())
+	}
+
+	wg.Wait()
+
+	return nil
 }
 
 func (f *FeedMerger) GetUpdates() chan models.Odd {
