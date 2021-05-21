@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"time"
 
 	"code-cadets-2021/homework_2/offerfeed/cmd/bootstrap"
 	"code-cadets-2021/homework_2/offerfeed/internal/tasks"
@@ -10,8 +11,10 @@ import (
 func main() {
 	signalHandler := bootstrap.SignalHandler()
 
-	axilisOfferFeed := bootstrap.AxilisOfferFeed()
-	notAJsonFeed := bootstrap.AnotherAxilisOfferFeed()
+	httpClient := bootstrap.HttpClient(time.Second * 10)
+
+	axilisOfferFeed := bootstrap.AxilisOfferFeed(httpClient)
+	notAJsonFeed := bootstrap.AnotherAxilisOfferFeed(httpClient)
 
 	feedMerger := bootstrap.FeedMerger(axilisOfferFeed, notAJsonFeed)
 

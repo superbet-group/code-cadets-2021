@@ -2,12 +2,10 @@ package bootstrap
 
 import (
 	stdhttp "net/http"
-	"time"
 
 	"code-cadets-2021/homework_2/offerfeed/internal/infrastructure/http"
 )
 
-func AxilisOfferFeed() *http.AxilisOfferFeed {
-	httpClient := &stdhttp.Client{Timeout: time.Second * 10}
+func AxilisOfferFeed(httpClient *stdhttp.Client) *http.AxilisOfferFeed {
 	return http.NewAxilisOfferFeed(httpClient)
 }
