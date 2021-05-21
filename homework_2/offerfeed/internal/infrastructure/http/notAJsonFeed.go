@@ -79,7 +79,7 @@ func (a *NotAJsonFeed) processResponse(ctx context.Context, response *http.Respo
 			Name:        parts[1],
 			Match:       parts[2],
 			Coefficient: coefficient,
-			Timestamp:   time.Time{},
+			Timestamp:   time.Now(),
 		}
 
 		// IMPORTANT SELECT!!!
