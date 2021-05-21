@@ -8,20 +8,20 @@ import (
 )
 
 type FeedMerger struct {
-	Feeds   []Feed
-	Updates chan models.Odd
+	feeds   []Feed
+	updates chan models.Odd
 }
 
 func NewFeedMerger(feeds ...Feed) *FeedMerger {
-	return &FeedMerger{Feeds: feeds, Updates: make(chan models.Odd)}
+	return &FeedMerger{feeds: feeds, updates: make(chan models.Odd)}
 }
 
 func (a *FeedMerger) Start(ctx context.Context) error {
-	defer close(a.Updates)
+	defer close(a.updates)
 	defer log.Printf("shutting down %s", a)
 
-	for _, feed := range a.Feeds {
-		feed.SetUpdates(a.Updates)
+	for _, feed := range a.feeds {
+		feed.SetUpdates(a.updates)
 	}
 
 	for {
@@ -33,7 +33,7 @@ func (a *FeedMerger) Start(ctx context.Context) error {
 }
 
 func (a *FeedMerger) GetUpdates() chan models.Odd {
-	return a.Updates
+	return a.updates
 }
 
 func (a *FeedMerger) String() string {
