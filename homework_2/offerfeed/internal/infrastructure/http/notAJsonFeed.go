@@ -20,10 +20,11 @@ type NotAJsonFeed struct {
 }
 
 func NewNotAJsonFeed(httpClient *http.Client) *NotAJsonFeed {
-	return &NotAJsonFeed{httpClient: httpClient}
+	return &NotAJsonFeed{updates: make(chan models.Odd), httpClient: httpClient}
 }
 
 func (a *NotAJsonFeed) Start(ctx context.Context) error {
+	defer close(a.updates)
 	defer log.Printf("shutting down %s", a)
 
 	for {
@@ -31,10 +32,6 @@ func (a *NotAJsonFeed) Start(ctx context.Context) error {
 		case <-ctx.Done():
 			return nil
 		case <-time.After(time.Second * 3):
-			if a.updates == nil {
-				continue
-			}
-
 			response, err := a.httpClient.Get(notAJsonFeedURL)
 			if err != nil {
 				log.Println("not a JSON feed, http get", err)
@@ -47,10 +44,6 @@ func (a *NotAJsonFeed) Start(ctx context.Context) error {
 
 func (a *NotAJsonFeed) GetUpdates() chan models.Odd {
 	return a.updates
-}
-
-func (a *NotAJsonFeed) SetUpdates(updates chan models.Odd) {
-	a.updates = updates
 }
 
 func (a *NotAJsonFeed) String() string {

@@ -20,10 +20,6 @@ func (f *FeedMerger) Start(ctx context.Context) error {
 	defer close(f.updates)
 	defer log.Printf("shutting down %s", f)
 
-	for _, feed := range f.feeds {
-		feed.SetUpdates(f.updates)
-	}
-
 	for {
 		select {
 		case <-ctx.Done():
@@ -41,5 +37,5 @@ func (f *FeedMerger) String() string {
 }
 
 type Feed interface {
-	SetUpdates(chan models.Odd)
+	GetUpdates() chan models.Odd
 }
