@@ -19,7 +19,7 @@ func main() {
 
 	processingService := bootstrap.FeedProcessingService(feedMerger, queue)
 
-	tasks.RunTasks(signalHandler, feedMerger, axilisOfferFeed, notAJsonFeed, queue, processingService)
+	tasks.RunTasks(signalHandler, axilisOfferFeed, notAJsonFeed, feedMerger, queue, processingService)
 
 	fmt.Println("program finished gracefully")
 }
