@@ -16,12 +16,12 @@ func NewFeedMerger(feeds ...Feed) *FeedMerger {
 	return &FeedMerger{feeds: feeds, updates: make(chan models.Odd)}
 }
 
-func (a *FeedMerger) Start(ctx context.Context) error {
-	defer close(a.updates)
-	defer log.Printf("shutting down %s", a)
+func (f *FeedMerger) Start(ctx context.Context) error {
+	defer close(f.updates)
+	defer log.Printf("shutting down %s", f)
 
-	for _, feed := range a.feeds {
-		feed.SetUpdates(a.updates)
+	for _, feed := range f.feeds {
+		feed.SetUpdates(f.updates)
 	}
 
 	for {
@@ -32,11 +32,11 @@ func (a *FeedMerger) Start(ctx context.Context) error {
 	}
 }
 
-func (a *FeedMerger) GetUpdates() chan models.Odd {
-	return a.updates
+func (f *FeedMerger) GetUpdates() chan models.Odd {
+	return f.updates
 }
 
-func (a *FeedMerger) String() string {
+func (f *FeedMerger) String() string {
 	return "feed merger"
 }
 
