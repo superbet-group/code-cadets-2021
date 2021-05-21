@@ -14,16 +14,16 @@ import (
 
 const notAJsonFeedURL = "http://18.193.121.232/axilis-feed-2"
 
-type NotAJsonFeed struct {
+type AnotherAxilisOfferFeed struct {
 	updates    chan models.Odd
 	httpClient *http.Client
 }
 
-func NewNotAJsonFeed(httpClient *http.Client) *NotAJsonFeed {
-	return &NotAJsonFeed{updates: make(chan models.Odd), httpClient: httpClient}
+func NewAnotherAxilisOfferFeed(httpClient *http.Client) *AnotherAxilisOfferFeed {
+	return &AnotherAxilisOfferFeed{updates: make(chan models.Odd), httpClient: httpClient}
 }
 
-func (a *NotAJsonFeed) Start(ctx context.Context) error {
+func (a *AnotherAxilisOfferFeed) Start(ctx context.Context) error {
 	defer close(a.updates)
 	defer log.Printf("shutting down %s", a)
 
@@ -42,15 +42,15 @@ func (a *NotAJsonFeed) Start(ctx context.Context) error {
 	}
 }
 
-func (a *NotAJsonFeed) GetUpdates() chan models.Odd {
+func (a *AnotherAxilisOfferFeed) GetUpdates() chan models.Odd {
 	return a.updates
 }
 
-func (a *NotAJsonFeed) String() string {
+func (a *AnotherAxilisOfferFeed) String() string {
 	return "not a JSON feed"
 }
 
-func (a *NotAJsonFeed) processResponse(ctx context.Context, response *http.Response) {
+func (a *AnotherAxilisOfferFeed) processResponse(ctx context.Context, response *http.Response) {
 	defer response.Body.Close()
 
 	bodyContent, err := ioutil.ReadAll(response.Body)

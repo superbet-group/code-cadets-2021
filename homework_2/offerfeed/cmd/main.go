@@ -11,7 +11,7 @@ func main() {
 	signalHandler := bootstrap.SignalHandler()
 
 	axilisOfferFeed := bootstrap.AxilisOfferFeed()
-	notAJsonFeed := bootstrap.NotAJsonFeed()
+	notAJsonFeed := bootstrap.AnotherAxilisOfferFeed()
 
 	feedMerger := bootstrap.FeedMerger(axilisOfferFeed, notAJsonFeed)
 

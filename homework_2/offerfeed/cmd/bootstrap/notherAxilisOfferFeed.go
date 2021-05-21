@@ -7,8 +7,8 @@ import (
 	"code-cadets-2021/homework_2/offerfeed/internal/infrastructure/http"
 )
 
-func NotAJsonFeed() *http.NotAJsonFeed {
+func AnotherAxilisOfferFeed() *http.AnotherAxilisOfferFeed {
 	httpClient := &stdhttp.Client{Timeout: time.Second * 10}
-	return http.NewNotAJsonFeed(httpClient)
+	return http.NewAnotherAxilisOfferFeed(httpClient)
 }
 
