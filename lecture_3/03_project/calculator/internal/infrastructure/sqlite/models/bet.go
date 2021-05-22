@@ -6,5 +6,4 @@ type Bet struct {
 	SelectionId          string
 	SelectionCoefficient int
 	Payment              int
-	Payout               int
 }
