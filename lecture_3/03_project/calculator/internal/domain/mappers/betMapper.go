@@ -24,7 +24,6 @@ func (m *BetMapper) MapDomainBetToStorageBet(domainBet domainmodels.Bet) storage
 		SelectionId:          domainBet.SelectionId,
 		SelectionCoefficient: int(math.Round(domainBet.SelectionCoefficient * 100)),
 		Payment:              int(math.Round(domainBet.Payment * 100)),
-		Payout:               int(math.Round(domainBet.Payout * 100)),
 	}
 }
 
@@ -36,6 +35,5 @@ func (m *BetMapper) MapStorageBetToDomainBet(storageBet storagemodels.Bet) domai
 		SelectionId:          storageBet.SelectionId,
 		SelectionCoefficient: float64(storageBet.SelectionCoefficient) / 100,
 		Payment:              float64(storageBet.Payment) / 100,
-		Payout:               float64(storageBet.Payout) / 100,
 	}
 }

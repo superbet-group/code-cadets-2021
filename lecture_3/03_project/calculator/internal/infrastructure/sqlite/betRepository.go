@@ -36,36 +36,13 @@ func (r *BetRepository) InsertBet(ctx context.Context, bet domainmodels.Bet) err
 }
 
 func (r *BetRepository) queryInsertBet(ctx context.Context, bet storagemodels.Bet) error {
-	insertBetSQL := "INSERT INTO bets(id, customer_id, status, selection_id, selection_coefficient, payment) VALUES (?, ?, ?, ?, ?, ?)"
+	insertBetSQL := "INSERT INTO bets(id, selection_id, selection_coefficient, payment) VALUES (?, ?, ?, ?)"
 	statement, err := r.dbExecutor.PrepareContext(ctx, insertBetSQL)
 	if err != nil {
 		return err
 	}
 
 	_, err = statement.ExecContext(ctx, bet.Id, bet.SelectionId, bet.SelectionCoefficient, bet.Payment)
-	return err
-}
-
-// UpdateBet updates the provided bet in the database. An error is returned if the operation
-// has failed.
-func (r *BetRepository) UpdateBet(ctx context.Context, bet domainmodels.Bet) error {
-	storageBet := r.betMapper.MapDomainBetToStorageBet(bet)
-	err := r.queryUpdateBet(ctx, storageBet)
-	if err != nil {
-		return errors.Wrap(err, "bet repository failed to update a bet with id "+bet.Id)
-	}
-	return nil
-}
-
-func (r *BetRepository) queryUpdateBet(ctx context.Context, bet storagemodels.Bet) error {
-	updateBetSQL := "UPDATE bets SET customer_id=?, status=?, selection_id=?, selection_coefficient=?, payment=? WHERE id=?"
-
-	statement, err := r.dbExecutor.PrepareContext(ctx, updateBetSQL)
-	if err != nil {
-		return err
-	}
-
-	_, err = statement.ExecContext(ctx, bet.SelectionId, bet.SelectionCoefficient, bet.Payment, bet.Id)
 	return err
 }
 
@@ -89,7 +66,7 @@ func (r *BetRepository) GetBetsBySelectionID(ctx context.Context, id string) ([]
 }
 
 func (r *BetRepository) queryGetBetsBySelectionID(ctx context.Context, id string) ([]storagemodels.Bet, error) {
-	row, err := r.dbExecutor.QueryContext(ctx, "SELECT * FROM bets WHERE selectionId='"+id+"';")
+	row, err := r.dbExecutor.QueryContext(ctx, "SELECT * FROM bets WHERE selection_id='"+id+"';")
 	if err != nil {
 		return []storagemodels.Bet{}, err
 	}
