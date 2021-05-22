@@ -6,9 +6,9 @@ import (
 	"log"
 	"os"
 
-	"code-cadets-2021/lecture_2/06_offerfeed/internal/domain/models"
-
 	"github.com/pkg/errors"
+
+	"code-cadets-2021/lecture_2/06_offerfeed/internal/domain/models"
 )
 
 type OrderedQueue struct {
@@ -16,9 +16,9 @@ type OrderedQueue struct {
 	source chan models.Odd
 }
 
-func NewOrderedQueue() *OrderedQueue {
+func NewOrderedQueue(source chan models.Odd) *OrderedQueue {
 	return &OrderedQueue{
-		source: make(chan models.Odd),
+		source: source,
 	}
 }
 
