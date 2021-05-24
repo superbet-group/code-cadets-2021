@@ -27,9 +27,7 @@ func (h *Handler) HandleBets(
 ) {
 	go func() {
 		for bet := range bets {
-			log.Println("Processing bet, betId:", bet.Id)
-
-			// Calculate the domain bet based on the incoming bet received.
+			// Calculate the domain bet based on the incoming bet.
 			domainBet := domainmodels.BetCalculated{
 				Id:                   bet.Id,
 				SelectionId:          bet.SelectionId,
@@ -42,11 +40,12 @@ func (h *Handler) HandleBets(
 				log.Println("Failed to query bet, error: ", err)
 				continue
 			}
+			// Ignore logging if bet already exists.
 			if found {
-				log.Println("Bet with id already exists in repository")
 				continue
 			}
 
+			log.Println("Processing bet, betId:", bet.Id)
 			// Insert the domain bet into the repository.
 			err = h.betCalculatedRepository.InsertBetCalculated(ctx, domainBet)
 			if err != nil {
