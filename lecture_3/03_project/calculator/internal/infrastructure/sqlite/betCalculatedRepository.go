@@ -123,6 +123,9 @@ func (r *BetCalculatedRepository) GetBetBySelectionID(ctx context.Context, selec
 	if err != nil {
 		return []domainmodels.BetCalculated{}, false, errors.Wrap(err, "bet repository failed to get a bets with selection id "+selectionId)
 	}
+	if len(storageBets) == 0 {
+		return []domainmodels.BetCalculated{}, false, nil
+	}
 
 	var domainBets []domainmodels.BetCalculated
 
