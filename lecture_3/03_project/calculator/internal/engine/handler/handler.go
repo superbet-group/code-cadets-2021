@@ -35,22 +35,25 @@ func (h *Handler) HandleBets(
 				Payment:              bet.Payment,
 			}
 
-			_, found, err := h.betCalculatedRepository.GetBetCalculatedByID(ctx, bet.Id)
+			_, found, err := h.betCalculatedRepository.GetBetCalculatedByID(ctx, domainBet.Id)
 			if err != nil {
 				log.Println("Failed to query bet, error: ", err)
 				continue
 			}
-			// Ignore logging if bet already exists.
-			if found {
-				continue
-			}
-
-			log.Println("Processing bet, betId:", bet.Id)
-			// Insert the domain bet into the repository.
-			err = h.betCalculatedRepository.InsertBetCalculated(ctx, domainBet)
-			if err != nil {
-				log.Println("Failed to insert bet, error: ", err)
-				continue
+			if !found {
+				log.Println("Inserting new bet")
+				err := h.betCalculatedRepository.InsertBetCalculated(ctx, domainBet)
+				if err != nil {
+					log.Println("Failed to insert bet, error: ", err)
+					continue
+				}
+			} else {
+				log.Println("Updating bet")
+				err := h.betCalculatedRepository.UpdateBetCalculated(ctx, domainBet)
+				if err != nil {
+					log.Println("Failed to insert bet, error: ", err)
+					continue
+				}
 			}
 		}
 	}()

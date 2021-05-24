@@ -78,12 +78,9 @@ func (r *BetCalculatedRepository) GetBetCalculatedByID(ctx context.Context, id s
 	if err != nil {
 		return domainmodels.BetCalculated{}, false, errors.Wrap(err, "bet repository failed to get a calculated bet with id "+id)
 	}
-	if storageBet == (storagemodels.BetCalculated{}) {
-		return domainmodels.BetCalculated{}, false, nil
-	}
 
 	domainBet := r.betCalculatedMapper.MapStorageBetToDomainBet(storageBet)
-	return domainBet, true, nil
+	return domainBet, domainBet != domainmodels.BetCalculated{}, nil
 }
 
 func (r *BetCalculatedRepository) queryGetBetCalculatedByID(ctx context.Context, id string) (storagemodels.BetCalculated, error) {
@@ -93,6 +90,7 @@ func (r *BetCalculatedRepository) queryGetBetCalculatedByID(ctx context.Context,
 	}
 	defer row.Close()
 
+	// This will move to the "next" result (which is the only result, because a single bet is fetched).
 	hasNext := row.Next()
 	if !hasNext {
 		return storagemodels.BetCalculated{}, nil
@@ -122,9 +120,6 @@ func (r *BetCalculatedRepository) GetBetBySelectionID(ctx context.Context, selec
 	}
 	if err != nil {
 		return []domainmodels.BetCalculated{}, false, errors.Wrap(err, "bet repository failed to get a bets with selection id "+selectionId)
-	}
-	if len(storageBets) == 0 {
-		return []domainmodels.BetCalculated{}, false, nil
 	}
 
 	var domainBets []domainmodels.BetCalculated
