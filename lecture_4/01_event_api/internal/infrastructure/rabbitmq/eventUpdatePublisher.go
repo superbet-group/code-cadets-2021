@@ -5,7 +5,7 @@ import (
 	"log"
 
 	"github.com/streadway/amqp"
-	"github.com/superbet-group/code-cadets-2021/lecture_3/03_project/controller/internal/infrastructure/rabbitmq/models"
+	"github.com/superbet-group/code-cadets-2021/lecture_4/01_event_api/internal/infrastructure/rabbitmq/models"
 )
 
 const contentTypeTextPlain = "text/plain"

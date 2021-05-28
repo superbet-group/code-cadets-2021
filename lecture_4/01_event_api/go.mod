@@ -1,4 +1,4 @@
-module github.com/superbet-group/code-cadets-2021/lecture_3/03_project/controller
+module github.com/superbet-group/code-cadets-2021/lecture_4/01_event_api
 
 go 1.14
 

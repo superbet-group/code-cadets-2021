@@ -2,12 +2,12 @@ package bootstrap
 
 import (
 	"github.com/streadway/amqp"
-	"github.com/superbet-group/code-cadets-2021/lecture_3/03_project/controller/cmd/config"
-	"github.com/superbet-group/code-cadets-2021/lecture_3/03_project/controller/internal/api"
-	"github.com/superbet-group/code-cadets-2021/lecture_3/03_project/controller/internal/api/controllers"
-	"github.com/superbet-group/code-cadets-2021/lecture_3/03_project/controller/internal/api/controllers/validators"
-	"github.com/superbet-group/code-cadets-2021/lecture_3/03_project/controller/internal/domain/services"
-	"github.com/superbet-group/code-cadets-2021/lecture_3/03_project/controller/internal/infrastructure/rabbitmq"
+	"github.com/superbet-group/code-cadets-2021/lecture_4/01_event_api/cmd/config"
+	"github.com/superbet-group/code-cadets-2021/lecture_4/01_event_api/internal/api"
+	"github.com/superbet-group/code-cadets-2021/lecture_4/01_event_api/internal/api/controllers"
+	"github.com/superbet-group/code-cadets-2021/lecture_4/01_event_api/internal/api/controllers/validators"
+	"github.com/superbet-group/code-cadets-2021/lecture_4/01_event_api/internal/domain/services"
+	"github.com/superbet-group/code-cadets-2021/lecture_4/01_event_api/internal/infrastructure/rabbitmq"
 )
 
 func newEventUpdateValidator() *validators.EventUpdateValidator {
