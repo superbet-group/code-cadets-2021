@@ -5,7 +5,7 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/gin-gonic/gin/binding"
-	"github.com/superbet-group/code-cadets-2021/lecture_3/03_project/controller/internal/api/controllers/models"
+	"github.com/superbet-group/code-cadets-2021/lecture_4/01_event_api/internal/api/controllers/models"
 )
 
 // Controller implements handlers for web server requests.
